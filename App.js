@@ -1,20 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import TabNavigation from './navigation/TabNavigation';
+import RutaPrincipal from './rutaslogin/RutaPrincipal';
+import AuthProvider,{useAuth} from './ValidarLogin';
 
-export default function App() {
+
+const Acceso = () => {
+  const [user] = useAuth();
+  if(!user){
+      return(
+        // <RutaPrincipal/>
+        <TabNavigation />
+      );
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+        <TabNavigation />
+  )
 }
+const App = () => {
+  return (
+    <SafeAreaProvider style={styles.container}>
+      <NavigationContainer>
+      <AuthProvider>
+        <Acceso/>
+        </AuthProvider>
+        </NavigationContainer>
+    </SafeAreaProvider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
+
+export default App;
