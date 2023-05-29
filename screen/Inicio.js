@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text,StyleSheet,ActivityIndicator,ScrollView,SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation,useIsFocused } from "@react-navigation/native";
+import { FontAwesome5 } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import ListItem from './DatosListar';
 import { listarpersonas } from '../api'
@@ -34,6 +35,7 @@ const Inicio = () => {
                     colors={['#3393FF', '#fff']}
                     style={[styles.example,{ borderRadius: 20 }]}
                 >
+          <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
           <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
               Total Motos
           </Animatable.Text>
@@ -42,6 +44,7 @@ const Inicio = () => {
                     colors={['#3393FF', '#fff']}
                     style={[styles.example,{ borderRadius: 20 }]}
                 >
+                  <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
           <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
               Disponibles
           </Animatable.Text>
@@ -50,6 +53,7 @@ const Inicio = () => {
                     colors={['#3393FF', '#fff']}
                     style={[styles.example,{ borderRadius: 20 }]}
                 >
+                  <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
           <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
               Total Carros
           </Animatable.Text>
@@ -58,6 +62,7 @@ const Inicio = () => {
                     colors={['#3393FF', '#fff']}
                     style={[styles.example,{ borderRadius: 20 }]}
                 >
+                  <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
           <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
               Disponibles
           </Animatable.Text>
@@ -120,8 +125,12 @@ const styles = StyleSheet.create({
     },
     centeredText: {
       textAlign: 'center',
-      margin: 10,
+      margin: 5,
       fontSize: 16,
+      fontWeight: 'bold',
+    },
+    centeredIcono: {
+      textAlign: 'center',
       fontWeight: 'bold',
     },
   });
