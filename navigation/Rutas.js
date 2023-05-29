@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import Inicio from '../screen/Inicio';
-import Listado from '../screen/Listado';
+import Ayuda from '../screen/Ayuda';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -19,12 +19,12 @@ const Rutas = () => {
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }} />
-      <Tabbotton.Screen name="Listado"
-        component={Listado}
+      <Tabbotton.Screen name="Ayuda"
+        component={Ayuda}
         options={{
-          tabBarLabel: 'Listado',
+          tabBarLabel: 'Ayuda',
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="camera-plus" color={color} size={26} />
+            <MaterialCommunityIcons name="help-box" color={color} size={30} />
           ),
         }} />
     </Tabbotton.Navigator>

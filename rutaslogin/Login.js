@@ -115,7 +115,7 @@ const Login = ({navigation}) => {
       <Animatable.Image 
           animation="bounceIn"
           duraton="1500"
-      source={require('../assets/marcay.png')}
+      source={require('../assets/parking.png')}
       style={styles.logo}
       resizeMode="stretch"
       />

@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
       marginLeft: 10,
       marginBottom: 10,
       backgroundColor: 'grey',
-      borderWidth: 0.5,
+      // borderWidth: 0.5,
       justifyContent: 'center'
     },
     centeredText: {
