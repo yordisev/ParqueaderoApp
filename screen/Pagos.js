@@ -73,6 +73,20 @@ const Pagos = () => {
                     </View>
                     {verdatos ? (
                         <>
+                        <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+                        width: '60%',
+                        height: 110,
+                        margin:10,
+                        marginLeft:85,
+                        }]}>
+                        <FontAwesome5 name="comment-dollar" size={50} color="white" />
+                        <Text style={styles.textlogo}>
+                                Total Debe
+                            </Text>
+                        <Text style={styles.textlogo}>
+                                $ 500.000
+                            </Text>
+                        </LinearGradient>
                     <View
                         style={{
                             height: 44,
@@ -231,6 +245,20 @@ const styles = StyleSheet.create({
     width: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  box: {
+    height: 200,
+    width: 100,
+    borderRadius: 5,
+    margin: 10,
+    backgroundColor: "#61dafb",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  textlogo: {
+    color: '#ffffff',
+    fontSize:17,
+    fontWeight: 'bold',
   },
   contenido: {
     backgroundColor: '#3393FF',
