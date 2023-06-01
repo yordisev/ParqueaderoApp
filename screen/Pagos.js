@@ -175,24 +175,6 @@ const Pagos = () => {
                        <Text style={styles.clasetitulo}>{item.fecha}</Text>
                        <Text style={styles.clasetitulo}>{item.hora}</Text>
                      </View>
-                     <View style={{
-                       flexDirection: 'row',
-                       justifyContent: 'space-between'
-                     }}>
-                       <TouchableOpacity onPress={() => alerta(item, 'P')}>
-                         <LinearGradient
-                           colors={['#FF4C33', '#fff']}
-                           style={{
-                             backgroundColor: '#0aada8',
-                             padding: 10,
-                             width: 50,
-                             borderRadius: 10,
-                           }}
-                         >
-                           <FontAwesome5 style={[styles.centeredIcono]} name="dollar-sign" size={15} color="#fff" />
-                         </LinearGradient>
-                       </TouchableOpacity>
-                     </View>
                    </View>
                  ))}
                </View>
