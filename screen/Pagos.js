@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, ImageBackground, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Button, Modal, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,12 +11,16 @@ const Pagos = () => {
         placabuscar:'',
       })
       const datosenviar = (name, value) => EnviarparaBuscar({...datosbuscar,[name]:value});
-    const [filtrardatos, setfiltrardatos] = useState([]);
-    const [datospagados, setdatospagados] = useState([]);
-    const [cargar, Cargando] = useState(false);
-    const [verdatos, setverdatos] = useState(false);
-    const [getSelectionMode, setSelectionMode] = useState(1);
-    const [gamesTab, setGamesTab] = useState(1);
+    
+      const [filtrardatos, setfiltrardatos] = useState([]);
+      const [datospagados, setdatospagados] = useState([]);
+      const [cargar, Cargando] = useState(false);
+      const [verdatos, setverdatos] = useState(false);
+      const [getSelectionMode, setSelectionMode] = useState(1);
+      const [gamesTab, setGamesTab] = useState(1);
+      const [modalVisible, setModalVisible] = useState(false);
+      const [resultado, setResultado] = useState(0);
+      const [cantidad, setCantidad] = useState('');
 
     const updateSwitchData = value => {
         setSelectionMode(value);
@@ -45,6 +49,14 @@ const Pagos = () => {
        }
       }
       }
+      const vermodal = () =>{
+        setModalVisible(true);
+      };
+      const totalapagar = (campo, valor) => {
+        setCantidad(valor);
+        const multiplicado = parseFloat(valor) * 6000;
+        setResultado(multiplicado.toString());
+      };
     return (
         cargar ? (
             <View style={[styles.cargandodatos, styles.containercargando]}>
@@ -139,7 +151,7 @@ const Pagos = () => {
                     {gamesTab == 1 &&  
                 <View>
                     <TouchableOpacity style={styles.pagar}
-                    onPress={() => {LoginAcceso( data.username, data.password )}}>
+                    onPress={() => {vermodal()}}>
                 <LinearGradient colors={['#3393FF', '#fff']} style={styles.pagar}>
                     <Text style={[styles.textSign, {color:'#fff'}]}>Pagar Todo</Text>
                 </LinearGradient>
@@ -195,6 +207,49 @@ const Pagos = () => {
                     }
                     </>
                     ): null}
+                    <Modal
+        animationType='slide'
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.containermodal}>
+          <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Cantidad de dias a Pagar"
+                        placeholderTextColor="#BDC3C7"
+                        keyboardType="numeric"
+                        onChangeText={(text) => totalapagar('pagaraqui',text)}
+                    />
+                    <View style={styles.icon}>
+                        <FontAwesome5 name='hashtag' size={25} color="black" />
+                        </View>
+                    </View>
+                    <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          width: '60%',
+          height: 110,
+          margin:10,
+          marginLeft:85,
+        }]}>
+        <Text style={styles.textlogo}>
+                Pagar: ${resultado}
+            </Text>
+        </LinearGradient>
+        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5, }}>
+          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          width: '60%',
+          height: 110,
+          margin:10,
+          marginLeft:85,
+        }]}>
+        <Ionicons name="send" size={50} color="white" />
+        <Text style={styles.textlogo}>
+                Pagar
+            </Text>
+        </LinearGradient>
+        </TouchableOpacity>
+            <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
+          </View>
+      </Modal>
                 </ScrollView>
             </SafeAreaView>
             </AlertNotificationRoot>
@@ -276,6 +331,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 16
+  },
+  containermodal: {
+    flex: 1,
+    backgroundColor: '#fff',
+  justifyContent: 'center',
   },
 });
 export default Pagos
