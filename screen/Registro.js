@@ -1,34 +1,85 @@
 import React,{useState} from 'react'
-import { StyleSheet, Text, View,Image, TextInput, ImageBackground, SafeAreaView, ScrollView,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,Button, TextInput, Modal, SafeAreaView, ScrollView,TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import {Dropdown} from 'react-native-element-dropdown';
 import { useNavigation } from "@react-navigation/native";
-import { buscarpornombre } from '../api'
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import { buscarpornombre,listartodaslastarifas,RegistroEntrada } from '../api'
 
 const Registro = () => {
   const navigation = useNavigation()
   const [datosbuscar, Enviarloginacceso] =  useState({
-    negocionombre:'',
+    nombrecliente:'',
   })
-  const [filtrardatos, setfiltrardatos] = useState([]);
   const datosenviar = (name, value) => Enviarloginacceso({...datosbuscar,[name]:value});
+  const [filtrardatos, setfiltrardatos] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [datosingreso, setdatosingresos] = useState([]);
+  const [valorDatos, setdatosvalor] = useState([]);
+  const [valorprecio, setvalor] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
   const Buscar = async () => {
-    if(datosbuscar.negocionombre == '' || datosbuscar.negocionombre == undefined || datosbuscar.negocionombre == null){
-      
+    if(datosbuscar.nombrecliente == '' || datosbuscar.nombrecliente == undefined || datosbuscar.nombrecliente == null){
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Entendido',
+        textBody: 'Por favor escriba un nombre o placa valido',
+        button: 'close',
+      })
     } else{
    try {
      const listadonegocios = await buscarpornombre(datosbuscar)
      setfiltrardatos(listadonegocios)
-    if(listadonegocios.status == true){
-    } else {
-       
-    }
    } catch (error) {
     console.error(error)
    }
   }
   }
+  const vermodal = (datos) =>{
+    setdatosingresos(datos);
+    setModalVisible(true);
+    ListarTarifa()
+  }
+  const ListarTarifa = async () => {
+    const datosoptenidos = await listartodaslastarifas()
+    var count = Object.keys(datosoptenidos).length;
+    let valores = [];
+    for (var i = 0; i < count; i++) {
+      valores.push({
+        value: datosoptenidos[i].precio,
+        label: datosoptenidos[i].precio,
+      });
+    }
+    setdatosvalor(valores);
+  }
+  const Entrada = async () => {
+    setModalVisible(false)
+    try {
+      const salidavehiculos = await RegistroEntrada(datosingreso,valorprecio)
+      const respuesta = JSON.parse(salidavehiculos[0].salida);
+      if (respuesta.CODIGO == 0) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Success',
+          textBody: respuesta.MENSAJE,
+          button: 'close',
+        })
+      } else {
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Error',
+          textBody: respuesta.MENSAJE,
+          button: 'close',
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
+    <AlertNotificationRoot>
         <SafeAreaView style={styles.container}>
           <ScrollView
             contentContainerStyle={styles.scrollContentContainer}
@@ -46,7 +97,7 @@ const Registro = () => {
     style={styles.input}
     placeholder="Placa a Buscar"
     placeholderTextColor="#BDC3C7"
-    onChangeText={(text) => datosenviar('negocionombre',text)}
+    onChangeText={(text) => datosenviar('nombrecliente',text)}
     onSubmitEditing={Buscar}
   />
   <TouchableOpacity
@@ -56,33 +107,102 @@ const Registro = () => {
     <Ionicons name='search' size={25} color="black" />
   </TouchableOpacity>
 </View>
-<View style={styles.contenercolumnas}>
-                                {
-                                    filtrardatos.map((item, index) => {
-                                        return (
-                                            <LinearGradient key={index}
-                                                colors={['#8ded76', '#ffffff']}
-                                                style={[styles.box, styles.item]}>
-                                                <TouchableOpacity
-                                                    onPress={() => navigation.navigate('DetalleNegocio', { negocio: item.id_negocio })}>
-                                                    <View style={styles.imageTitleContainer}>
-                                                        <Image source={{ uri: item.imagen }} style={styles.imagenestilo} />
-                                                        <Text style={styles.textlogo}>{item.nombre_negocio}</Text>
-                                                    </View>
-
-                                                </TouchableOpacity>
-                                            </LinearGradient>
-
-                                        );
-                                    })
-                                }
-                            </View>
+<View style={{ padding: 10 }}>
+              {filtrardatos.map(item => (
+                <View style={[styles.contenido]} key={item.cedula}>
+                  <View style={{ paddingRight: 5, }}>
+                    <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
+                    <Text style={styles.clasetitulo}>{item.placa}</Text>
+                  </View>
+                    <TouchableOpacity onPress={() => vermodal(item)} style={{ paddingRight: 5, }}>
+                      <LinearGradient
+                        colors={['#FF4C33', '#fff']}
+                        style={{
+                          backgroundColor: '#0aada8',
+                          padding: 15,
+                          width: 60,
+                          borderRadius: 10,
+                        }}
+                      >
+                        <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
+                      </LinearGradient>
+                    </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <Modal
+        animationType='slide'
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.containermodal}>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="user-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosingreso.nombre}</Text>
+      </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="phone-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosingreso.celular}</Text>
+      </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="car-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosingreso.placa}</Text>
+      </View>
+      <Dropdown
+          style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={valorDatos}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Seleccionar Precio' : '...'}
+          searchPlaceholder="Buscar..."
+          value={valorprecio}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setvalor(item.value);
+            setIsFocus(false);
+          }}
+        />
+        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5, }}>
+          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          width: '60%',
+          height: 110,
+          margin:10,
+          marginLeft:85,
+        }]}>
+        <Ionicons name="send" size={70} color="white" />
+        <Text style={styles.textlogo}>
+                Registrar Entrada
+            </Text>
+        </LinearGradient>
+        </TouchableOpacity>
+            <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
+          </View>
+      </Modal>
           </ScrollView>
         </SafeAreaView>
+        </AlertNotificationRoot>
   );
 }
 
 const styles = StyleSheet.create({
+  containermodal: {
+    flex: 1,
+    backgroundColor: '#fff',
+    // alignItems: 'center',
+  justifyContent: 'center',
+  },
   image: {
     flex: 1,
     justifyContent: "center"
@@ -120,41 +240,84 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  contenercolumnas: {
-    justifyContent: "center",
-    flex: 1,
+  contenido: {
+    backgroundColor: '#3ED5F3',
+    padding: 20,
+    marginVertical: 8,
+    borderRadius: 12,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start'
-},
-  imageTitleContainer: {
-    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  centeredIcono: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  clasetitulo: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  iconContainer:{
+    backgroundColor: '#83baf2',
     justifyContent: 'center',
-    marginBottom: 10,
+    alignItems: 'center',
+    borderRadius: 15,
+    width: 50,
+    height: 50,
+  },
+  containerotro:{
+    flexDirection: 'row',
+    backgroundColor: '#949c92',
+    fontWeight: '700',
+    marginBottom: 23,
+    marginHorizontal: 28,
+    alignItems: 'center',
+    elevation: 20,
+    borderRadius: 15,
+  },
+  text:{
+    marginLeft: 70,
+    paddingRight: 20,
+    fontSize: 17,
+    fontWeight: '700',
+    color: 'white',
 },
-imagenestilo: {
-  width: 170,
-  height: 150,
-  borderRadius: 5,
-    marginBottom: 10,
+dropdown: {
+  width: '85%',
+  height: 50,
+  borderColor: 'gray',
+  borderWidth: 0.5,
+  borderRadius: 8,
+  paddingHorizontal: 10,
+  marginLeft:30,
+  marginBottom: 10,
 },
-item: {
-  width: '45%',
-  height: 190,
-  margin: 5
+placeholderStyle: {
+  fontSize: 16,
+},
+selectedTextStyle: {
+  fontSize: 16,
+},
+iconStyle: {
+  width: 20,
+  height: 20,
+},
+inputSearchStyle: {
+  height: 40,
+  fontSize: 16,
 },
 box: {
-  height: 100,
+  height: 200,
   width: 100,
   borderRadius: 5,
-  marginVertical: 5,
+  margin: 10,
   backgroundColor: "#61dafb",
   alignItems: "center",
   justifyContent: "center"
 },
 textlogo: {
-  color: 'black',
-  fontSize: 15,
+  color: '#ffffff',
+  fontSize:17,
   fontWeight: 'bold',
 },
 });
