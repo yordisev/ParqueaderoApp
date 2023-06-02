@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView,Button, SafeAreaView, TouchableOpacity, Alert,Modal } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5,MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { listarsalidacarros, RegistroSalida,RealizarCalculo } from '../api'
+import { listarsalidacarros, RegistroSalida, RealizarCalculo } from '../api'
 
 const Inicio = () => {
   const navigation = useNavigation();
@@ -36,7 +36,7 @@ const Inicio = () => {
       { cancelable: false }
     )
   }
-  const vermodal = (codigo) =>{
+  const vermodal = (codigo) => {
     setModalVisible(true);
     Calcularpago(codigo);
   };
@@ -53,6 +53,7 @@ const Inicio = () => {
     try {
       const salidavehiculos = await RegistroSalida(datos, accion)
       const respuesta = JSON.parse(salidavehiculos[0].salida);
+      setModalVisible(false);
       if (respuesta.CODIGO == 0) {
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
@@ -124,12 +125,12 @@ const Inicio = () => {
             </Animatable.View>
             <View style={{ padding: 30 }}>
               {filtrardatos.map(item => (
-                <View style={[styles.contenido]} key={item.id_en_sa}>
+                <Animatable.View animation="fadeInLeft" style={[styles.contenido]} key={item.id_en_sa}>
                   <View>
                     <Text style={styles.clasetitulo}>{item.nombre}</Text>
                     <Text style={styles.clasetitulo}>{item.placa_vehiculo}</Text>
                   </View>
-                  <View style={{ alignItems:'center' }}>
+                  <View style={{ alignItems: 'center' }}>
                     <Text style={styles.clasetitulo}>{item.fecha}</Text>
                     <Text style={styles.clasetitulo}>{item.hora}</Text>
                   </View>
@@ -137,7 +138,7 @@ const Inicio = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between'
                   }}>
-                    <TouchableOpacity onPress={() => alerta(item, 'S')} style={{ paddingRight: 5, }}>
+                    {/* <TouchableOpacity onPress={() => alerta(item, 'S')} style={{ paddingRight: 5, }}>
                       <LinearGradient
                         colors={['#FF4C33', '#fff']}
                         style={{
@@ -149,7 +150,7 @@ const Inicio = () => {
                       >
                         <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
                       </LinearGradient>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => vermodal(item.id_en_sa)}>
                       <LinearGradient
                         colors={['#3393FF', '#fff']}
@@ -164,52 +165,96 @@ const Inicio = () => {
                       </LinearGradient>
                     </TouchableOpacity>
                   </View>
-                </View>
+                </Animatable.View>
               ))}
             </View>
             <Modal
-        animationType='slide'
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-          <View style={styles.containermodal}>
-          <View style={styles.containerotro}>
-          <View style={styles.iconContainer}>
-              <FontAwesome5 name="user-alt" size={20}/>
-          </View>
-          <Text style={styles.text}>{datospagar.Nombre}</Text>
-      </View>
-          <View style={styles.containerotro}>
-          <View style={styles.iconContainer}>
-              <FontAwesome5 name="car-alt" size={20}/>
-          </View>
-          <Text style={styles.text}>{datospagar.Placa}</Text>
-      </View>
-                    <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
-          width: '60%',
-          height: 110,
-          margin:10,
-          marginLeft:85,
-        }]}>
-        <Text style={styles.textlogo}>
-        Pagar : $ {datospagar.Pagar}
-            </Text>
-        </LinearGradient>
-        <TouchableOpacity onPress={() => Salida()} style={{ paddingRight: 5, }}>
-          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
-          width: '60%',
-          height: 110,
-          margin:10,
-          marginLeft:85,
-        }]}>
-        <FontAwesome5 name="dollar-sign" size={50} color="white" />
-        <Text style={styles.textlogo}>
-              Realizar Pago
-            </Text>
-        </LinearGradient>
-        </TouchableOpacity>
-            <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
-          </View>
-      </Modal>
+              animationType='slide'
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}>
+              <View style={styles.containermodal}>
+                <View style={{alignItems: "center",paddingBottom: 30}}>
+              <Text style={{
+                  color: '#fff',
+                  fontSize: 25,
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase', justifyContent: 'center',
+                }}>
+                  Datos del Cliente
+                </Text>
+                </View>
+                <View style={styles.containerotro}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5 name="user-alt" size={20} />
+                  </View>
+                  <Text style={styles.text}>{datospagar.Nombre}</Text>
+                </View>
+                <View style={styles.containerotro}>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome5 name="car-alt" size={20} />
+                  </View>
+                  <Text style={styles.text}>{datospagar.Placa}</Text>
+                </View>
+                <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
+              <LinearGradient
+                colors={['#3393FF', '#fff']}
+                style={[styles.example, { borderRadius: 20 }]}
+              >
+                <MaterialCommunityIcons style={[styles.centeredIcono]} name="login" size={30} color="#fff" />
+                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                  Hora Ingreso
+                </Animatable.Text>
+                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                  {datospagar.Hora_entrada}
+                </Animatable.Text>
+              </LinearGradient>
+              <LinearGradient
+                colors={['#3393FF', '#fff']}
+                style={[styles.example, { borderRadius: 20 }]}
+              >
+                <MaterialCommunityIcons style={[styles.centeredIcono]} name="logout" size={30} color="#fff" />
+                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                  Hora Salida
+                </Animatable.Text>
+                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                {datospagar.Hora_salida}
+                </Animatable.Text>
+              </LinearGradient>
+              <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+                  width: '60%',
+                  height: 110,
+                  margin: 10,
+                }]}>
+                  <Text style={styles.textlogo}>
+                    Pagar : $ {datospagar.Pagar}
+                  </Text>
+                </LinearGradient>
+            </Animatable.View>
+            <Animatable.View animation="fadeInUp">
+               
+                <TouchableOpacity onPress={() => Salida(datospagar,'P')} style={{ paddingRight: 5 }}>
+  <LinearGradient
+    colors={['#83baf2', '#ffffff']}
+    style={[
+      styles.box,
+      {
+        width: '50%',
+        height: 70,
+        margin: 10,
+        marginLeft: 95,
+        flexDirection: 'row', // Añade esta línea para alinear el icono y el texto en fila
+        alignItems: 'center', // Añade esta línea para centrar verticalmente el contenido
+      },
+    ]}
+  >
+    <Ionicons name="send" size={20} color="white" />
+    <Text  style={[styles.textlogo,{paddingLeft:7}]}>Realizar Pago</Text>
+  </LinearGradient>
+</TouchableOpacity>
+                </Animatable.View>
+                <Button  title="Cancelar" onPress={() => setModalVisible(false)} />
+              </View>
+            </Modal>
           </ScrollView>
         </SafeAreaView>
       </AlertNotificationRoot>
@@ -272,9 +317,10 @@ const styles = StyleSheet.create({
   containermodal: {
     flex: 1,
     backgroundColor: '#fff',
-  justifyContent: 'center',
+    justifyContent: 'center',
+    marginTop:30
   },
-  iconContainer:{
+  iconContainer: {
     backgroundColor: '#83baf2',
     justifyContent: 'center',
     alignItems: 'center',
@@ -282,7 +328,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  containerotro:{
+  containerotro: {
     flexDirection: 'row',
     backgroundColor: '#949c92',
     fontWeight: '700',
@@ -292,26 +338,26 @@ const styles = StyleSheet.create({
     elevation: 20,
     borderRadius: 15,
   },
-  text:{
+  text: {
     marginLeft: 10,
     paddingRight: 20,
     fontSize: 17,
     fontWeight: '700',
     color: 'white',
-},
-textlogo: {
-  color: '#ffffff',
-  fontSize:25,
-  fontWeight: 'bold',
-},
-box: {
-  height: 200,
-  width: 100,
-  borderRadius: 5,
-  margin: 10,
-  backgroundColor: "#61dafb",
-  alignItems: "center",
-  justifyContent: "center"
-},
+  },
+  textlogo: {
+    color: '#ffffff',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  box: {
+    height: 200,
+    width: 100,
+    borderRadius: 5,
+    margin: 10,
+    backgroundColor: "#61dafb",
+    alignItems: "center",
+    justifyContent: "center"
+  },
 });
 export default Inicio

@@ -216,6 +216,16 @@ const Pagos = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
           <View style={styles.containermodal}>
+          <View style={{alignItems: "center",paddingBottom: 30}}>
+              <Text style={{
+                  color: '#fff',
+                  fontSize: 25,
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase', justifyContent: 'center',
+                }}>
+                  Datos del Cliente
+                </Text>
+                </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
               <FontAwesome5 name="user-alt" size={20}/>

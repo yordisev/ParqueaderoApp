@@ -18,10 +18,10 @@ export const RealizarCalculo = async (codigo) => {
 }
 export const RegistroSalida = async (datosclientes,accion) => {
   const datosenviar = {
-    id:datosclientes.id_en_sa,
+    id:datosclientes.Id_unico,
     accion:accion,
-    placa:datosclientes.placa_vehiculo,
-    pagar:datosclientes.id_en_sa
+    placa:datosclientes.Placa,
+    pagar:datosclientes.Pagar
   }
   const result =  await fetch(API+'realizarsalida', { method: "POST",headers: headersyordis,body: JSON.stringify(datosenviar)})
   const resultado = await result.json()

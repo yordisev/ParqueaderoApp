@@ -4,6 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import {Dropdown} from 'react-native-element-dropdown';
+import * as Animatable from 'react-native-animatable';
 import { useNavigation } from "@react-navigation/native";
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import { buscarpornombre,listartodaslastarifas,RegistroEntrada } from '../api'
@@ -109,7 +110,7 @@ const Registro = () => {
 </View>
 <View style={{ padding: 10 }}>
               {filtrardatos.map(item => (
-                <View style={[styles.contenido]} key={item.cedula}>
+                <Animatable.View animation="fadeInLeft"  style={[styles.contenido]} key={item.cedula}>
                   <View style={{ paddingRight: 5, }}>
                     <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
                     <Text style={styles.clasetitulo}>{item.placa}</Text>
@@ -127,7 +128,7 @@ const Registro = () => {
                         <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
                       </LinearGradient>
                     </TouchableOpacity>
-                </View>
+                </Animatable.View>
               ))}
             </View>
             <Modal
@@ -135,6 +136,16 @@ const Registro = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
           <View style={styles.containermodal}>
+          <View style={{alignItems: "center",paddingBottom: 30}}>
+              <Text style={{
+                  color: '#fff',
+                  fontSize: 25,
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase', justifyContent: 'center',
+                }}>
+                  Datos del Cliente
+                </Text>
+                </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
               <FontAwesome5 name="user-alt" size={20}/>
@@ -174,19 +185,26 @@ const Registro = () => {
             setIsFocus(false);
           }}
         />
-        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5, }}>
-          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
-          width: '60%',
-          height: 110,
-          margin:10,
-          marginLeft:85,
-        }]}>
-        <Ionicons name="send" size={70} color="white" />
-        <Text style={styles.textlogo}>
-                Registrar Entrada
-            </Text>
-        </LinearGradient>
-        </TouchableOpacity>
+        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5 }}>
+  <LinearGradient
+    colors={['#83baf2', '#ffffff']}
+    style={[
+      styles.box,
+      {
+        width: '50%',
+        height: 70,
+        margin: 10,
+        marginLeft: 95,
+        flexDirection: 'row', // Añade esta línea para alinear el icono y el texto en fila
+        alignItems: 'center', // Añade esta línea para centrar verticalmente el contenido
+      },
+    ]}
+  >
+    <Ionicons name="send" size={30} color="white" />
+    <Text  style={[styles.textlogo,{paddingLeft:7}]}>Registrar Entrada</Text>
+  </LinearGradient>
+</TouchableOpacity>
+
             <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
           </View>
       </Modal>
