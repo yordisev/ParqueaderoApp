@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView,Button, SafeAreaView, TouchableOpacity, Alert,Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { FontAwesome5 } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { listarsalidacarros, RegistroSalida } from '../api'
+import { listarsalidacarros, RegistroSalida,RealizarCalculo } from '../api'
 
 const Inicio = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [cargar, Cargando] = useState(false);
   const [filtrardatos, setfiltrardatos] = useState([]);
+  const [datospagar, setdatospagar] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     Cargarlista()
@@ -32,6 +35,19 @@ const Inicio = () => {
       ],
       { cancelable: false }
     )
+  }
+  const vermodal = (codigo) =>{
+    setModalVisible(true);
+    Calcularpago(codigo);
+  };
+  const Calcularpago = async (codigo) => {
+    try {
+      const DatoCalculado = await RealizarCalculo(codigo)
+      const respuesta = JSON.parse(DatoCalculado[0].salida);
+      setdatospagar(respuesta);
+    } catch (error) {
+      console.error(error)
+    }
   }
   const Salida = async (datos, accion) => {
     try {
@@ -134,7 +150,7 @@ const Inicio = () => {
                         <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
                       </LinearGradient>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => alerta(item, 'P')}>
+                    <TouchableOpacity onPress={() => vermodal(item.id_en_sa)}>
                       <LinearGradient
                         colors={['#3393FF', '#fff']}
                         style={{
@@ -151,9 +167,49 @@ const Inicio = () => {
                 </View>
               ))}
             </View>
-            {/* <Button title="navegar" onPress={() => navigation.navigate('Detalle', { idbuscar: 1 })}/>
-      <Button title="Atras" onPress={() => navigation.goBack()}/>
-      <Button title="Abrir Menu" onPress={() => navigation.openDrawer()}/> */}
+            <Modal
+        animationType='slide'
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.containermodal}>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="user-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datospagar.Nombre}</Text>
+      </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="car-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datospagar.Placa}</Text>
+      </View>
+                    <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          width: '60%',
+          height: 110,
+          margin:10,
+          marginLeft:85,
+        }]}>
+        <Text style={styles.textlogo}>
+        Pagar : $ {datospagar.Pagar}
+            </Text>
+        </LinearGradient>
+        <TouchableOpacity onPress={() => Salida()} style={{ paddingRight: 5, }}>
+          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          width: '60%',
+          height: 110,
+          margin:10,
+          marginLeft:85,
+        }]}>
+        <FontAwesome5 name="dollar-sign" size={50} color="white" />
+        <Text style={styles.textlogo}>
+              Realizar Pago
+            </Text>
+        </LinearGradient>
+        </TouchableOpacity>
+            <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
+          </View>
+      </Modal>
           </ScrollView>
         </SafeAreaView>
       </AlertNotificationRoot>
@@ -213,5 +269,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16
   },
+  containermodal: {
+    flex: 1,
+    backgroundColor: '#fff',
+  justifyContent: 'center',
+  },
+  iconContainer:{
+    backgroundColor: '#83baf2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    width: 50,
+    height: 50,
+  },
+  containerotro:{
+    flexDirection: 'row',
+    backgroundColor: '#949c92',
+    fontWeight: '700',
+    marginBottom: 23,
+    marginHorizontal: 28,
+    alignItems: 'center',
+    elevation: 20,
+    borderRadius: 15,
+  },
+  text:{
+    marginLeft: 10,
+    paddingRight: 20,
+    fontSize: 17,
+    fontWeight: '700',
+    color: 'white',
+},
+textlogo: {
+  color: '#ffffff',
+  fontSize:25,
+  fontWeight: 'bold',
+},
+box: {
+  height: 200,
+  width: 100,
+  borderRadius: 5,
+  margin: 10,
+  backgroundColor: "#61dafb",
+  alignItems: "center",
+  justifyContent: "center"
+},
 });
 export default Inicio

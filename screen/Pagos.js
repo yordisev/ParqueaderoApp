@@ -13,6 +13,7 @@ const Pagos = () => {
       const datosenviar = (name, value) => EnviarparaBuscar({...datosbuscar,[name]:value});
     
       const [filtrardatos, setfiltrardatos] = useState([]);
+      const [datosdelmodal, setdatosmodal] = useState([]);
       const [datospagados, setdatospagados] = useState([]);
       const [cargar, Cargando] = useState(false);
       const [verdatos, setverdatos] = useState(false);
@@ -20,7 +21,6 @@ const Pagos = () => {
       const [gamesTab, setGamesTab] = useState(1);
       const [modalVisible, setModalVisible] = useState(false);
       const [resultado, setResultado] = useState(0);
-      const [cantidad, setCantidad] = useState('');
 
     const updateSwitchData = value => {
         setSelectionMode(value);
@@ -39,6 +39,7 @@ const Pagos = () => {
        try {
          const listadoPendiente = await buscarporplaca(datosbuscar)
          setfiltrardatos(listadoPendiente)
+         setdatosmodal(listadoPendiente[0]);
          const listadoPagados = await buscarpagosrealizados(datosbuscar)
          setdatospagados(listadoPagados)
          Cargando(false);
@@ -53,8 +54,7 @@ const Pagos = () => {
         setModalVisible(true);
       };
       const totalapagar = (campo, valor) => {
-        setCantidad(valor);
-        const multiplicado = parseFloat(valor) * 6000;
+        const multiplicado = parseFloat(valor) * datosdelmodal.monto_a_cancelar;
         setResultado(multiplicado.toString());
       };
     return (
@@ -162,6 +162,10 @@ const Pagos = () => {
                       <Text style={styles.clasetitulo}>{item.nombre}</Text>
                       <Text style={styles.clasetitulo}>{item.placa_vehiculo}</Text>
                     </View>
+                    <View>
+                      <Text style={styles.clasetitulo}>Valor</Text>
+                      <Text style={styles.clasetitulo}>$ {item.monto_a_cancelar}</Text>
+                    </View>
                     <View style={{ alignItems:'center' }}>
                       <Text style={styles.clasetitulo}>{item.fecha}</Text>
                       <Text style={styles.clasetitulo}>{item.hora}</Text>
@@ -212,7 +216,19 @@ const Pagos = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
           <View style={styles.containermodal}>
-          <View style={styles.inputContainer}>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="user-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosdelmodal.nombre} {datosdelmodal.apellido}</Text>
+      </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="car-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosdelmodal.placa_vehiculo}</Text>
+      </View>
+          <View style={styles.containerotro}>
                     <TextInput
                         style={styles.input}
                         placeholder="Cantidad de dias a Pagar"
@@ -241,7 +257,7 @@ const Pagos = () => {
           margin:10,
           marginLeft:85,
         }]}>
-        <Ionicons name="send" size={50} color="white" />
+        <Ionicons name="save" size={50} color="white" />
         <Text style={styles.textlogo}>
                 Pagar
             </Text>
@@ -337,5 +353,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   justifyContent: 'center',
   },
+  iconContainer:{
+    backgroundColor: '#83baf2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    width: 50,
+    height: 50,
+  },
+  containerotro:{
+    flexDirection: 'row',
+    backgroundColor: '#949c92',
+    fontWeight: '700',
+    marginBottom: 23,
+    marginHorizontal: 28,
+    alignItems: 'center',
+    elevation: 20,
+    borderRadius: 15,
+  },
+  text:{
+    marginLeft: 10,
+    paddingRight: 20,
+    fontSize: 17,
+    fontWeight: '700',
+    color: 'white',
+},
 });
 export default Pagos

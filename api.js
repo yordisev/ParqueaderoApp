@@ -11,7 +11,11 @@ export const listarsalidacarros = async () => {
   const resultado = await result.json()
        return resultado;
 }
-
+export const RealizarCalculo = async (codigo) => {
+  const result =  await fetch(`${API}realizarcalculo/${codigo}`,{ method: "GET",headers: headersyordis})
+  const resultado = await result.json()
+  return resultado;
+}
 export const RegistroSalida = async (datosclientes,accion) => {
   const datosenviar = {
     id:datosclientes.id_en_sa,
@@ -57,6 +61,16 @@ export const buscarpagosrealizados = async (codigo) => {
   return resultado;
 }
 
+export const RealizarPagoPorDias= async (datos,valor) => {
+  const datosenviar = {
+    cliente:datos.cedula,
+    v_precio_pagar:valor,
+    placa:datos.placa
+  }
+  const result =  await fetch(API+'realizarentrada', { method: "POST",headers: headersyordis,body: JSON.stringify(datosenviar)})
+  const resultado = await result.json()
+  return resultado;
+}
 
   export const accederalsistema = async (loginacceso) => {
     const result =  await fetch(API+'login', { method: "POST",headers: {
