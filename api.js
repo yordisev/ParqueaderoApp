@@ -61,6 +61,18 @@ export const buscarpagosrealizados = async (codigo) => {
   return resultado;
 }
 
+export const Realizarpagototal = async (datosclientes,valorpagar,dias) => {
+  const datosenviar = {
+    cantidaddias:parseInt(dias),
+    cliente:datosclientes.cedula,
+    placa:datosclientes.placa_vehiculo,
+    montopagar:parseInt(valorpagar)
+  }
+  const result =  await fetch(API+'realizarpagototal', { method: "POST",headers: headersyordis,body: JSON.stringify(datosenviar)})
+  const resultado = await result.json()
+  return resultado;
+}
+
 export const RealizarPagoPorDias= async (datos,valor) => {
   const datosenviar = {
     cliente:datos.cedula,

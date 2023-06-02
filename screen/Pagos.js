@@ -4,7 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { buscarporplaca,buscarpagosrealizados } from '../api'
+import { buscarporplaca,buscarpagosrealizados,Realizarpagototal } from '../api'
 
 const Pagos = () => {
     const [datosbuscar, EnviarparaBuscar] =  useState({
@@ -20,6 +20,7 @@ const Pagos = () => {
       const [getSelectionMode, setSelectionMode] = useState(1);
       const [gamesTab, setGamesTab] = useState(1);
       const [modalVisible, setModalVisible] = useState(false);
+      const [cantidaddias, setcantidaddias] = useState(0);
       const [resultado, setResultado] = useState(0);
 
     const updateSwitchData = value => {
@@ -54,9 +55,34 @@ const Pagos = () => {
         setModalVisible(true);
       };
       const totalapagar = (campo, valor) => {
+        setcantidaddias(valor);
         const multiplicado = parseFloat(valor) * datosdelmodal.monto_a_cancelar;
         setResultado(multiplicado.toString());
       };
+      const RealizarPago = async (datos, valorpagar) => {
+        try {
+          const salidavehiculos = await Realizarpagototal(datos, valorpagar,cantidaddias)
+          const respuesta = JSON.parse(salidavehiculos[0].salida);
+          setModalVisible(false);
+          if (respuesta.CODIGO == 0) {
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'Success',
+              textBody: respuesta.MENSAJE,
+              button: 'close',
+            })
+          } else {
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: 'Error',
+              textBody: respuesta.MENSAJE,
+              button: 'close',
+            })
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
     return (
         cargar ? (
             <View style={[styles.cargandodatos, styles.containercargando]}>
@@ -260,7 +286,7 @@ const Pagos = () => {
                 Pagar: ${resultado}
             </Text>
         </LinearGradient>
-        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5, }}>
+        <TouchableOpacity onPress={() => RealizarPago(datosdelmodal,resultado)} style={{ paddingRight: 5, }}>
           <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
           width: '60%',
           height: 110,
