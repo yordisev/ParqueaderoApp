@@ -1,9 +1,12 @@
-import React,{useState} from 'react'
+import React,{useRef,useState} from 'react'
 import { View, Text,StyleSheet,TouchableOpacity,Modal,Button } from 'react-native'
 import AwesomeAlert from 'react-native-awesome-alerts';
+import  Toast  from 'react-native-toast-message';
+import DropdownAlert from 'react-native-dropdownalert';
 
 const Ayuda = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  let dropDownAlertRef = useRef();
   showAlert = () => {
     setModalVisible(true)
   };
@@ -14,14 +17,36 @@ const Ayuda = () => {
     console.log("aceptarrr")
     setModalVisible(false)
   };
-  cancelar = () => {
-    console.log("cancelar")
+  showToast = () => {
+    // Toast.hide();
+    Toast.show({
+      type:"success",
+      text1:"pruebas",
+      text2:"pruebas2",
+      position:"top",
+      autoHide:true,
+      visibilityTime:2500,
+     onShow:()=>{console.log("visible")},
+     onHide:()=>{console.log("hidden")},
+     onPress:()=>{console.log("precionado")}
+    })
+  };
+  showAlertDrown = () => {
+    dropDownAlertRef.alertWithType('success', 'Exitoso', 'aaaaaaaaaaaaaaa');
   };
 
 
   return (
     <View style={styles.container}>
       {/* <Button title="Ver Modal" onPress={() => setModalVisible(true)} /> */}
+      <Button title="Ver alert" onPress={() => showAlertDrown()} />
+      <DropdownAlert  ref={(ref) => {
+          if (ref) {
+            dropDownAlertRef = ref;
+          }
+        }}/>
+      <Button title="Ver Toast" onPress={() => showToast()} />
+      <Toast/>
       <Button title="Ver Modal" onPress={() => showAlert()} />
       <AwesomeAlert
           show={modalVisible}
