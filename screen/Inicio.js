@@ -318,6 +318,7 @@ const styles = StyleSheet.create({
     margin: 5,
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'white',
   },
   centeredIcono: {
     textAlign: 'center',
