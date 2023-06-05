@@ -153,7 +153,7 @@ const Inicio = () => {
                     </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => vermodal(item.id_en_sa)}>
                       <LinearGradient
-                        colors={['#3393FF', '#fff']}
+                        colors={['#FF4C33', '#fff']}
                         style={{
                           backgroundColor: '#0aada8',
                           padding: 10,
@@ -262,7 +262,7 @@ const Inicio = () => {
 }
 const styles = StyleSheet.create({
   contenido: {
-    backgroundColor: '#3393FF',
+    backgroundColor: '#A0C4F9',
     padding: 20,
     marginVertical: 8,
     borderRadius: 12,

@@ -124,8 +124,8 @@ const Registro = () => {
                         colors={['#FF4C33', '#fff']}
                         style={{
                           backgroundColor: '#0aada8',
-                          padding: 15,
-                          width: 60,
+                          padding: 10,
+                          width: 50,
                           borderRadius: 10,
                         }}
                       >
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contenido: {
-    backgroundColor: '#3ED5F3',
+    backgroundColor: '#A0C4F9',
     padding: 20,
     marginVertical: 8,
     borderRadius: 12,
