@@ -115,6 +115,10 @@ const Registro = () => {
                     <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
                     <Text style={styles.clasetitulo}>{item.placa}</Text>
                   </View>
+                  <View style={{ paddingRight: 15,paddingLeft: 9, }}>
+                    <Text style={styles.clasetitulo}>Celular:</Text>
+                    <Text style={styles.clasetitulo}>{item.celular}</Text>
+                  </View>
                     <TouchableOpacity onPress={() => vermodal(item)} style={{ paddingRight: 5, }}>
                       <LinearGradient
                         colors={['#FF4C33', '#fff']}

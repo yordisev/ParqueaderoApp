@@ -22,13 +22,13 @@ const Rutas = () => {
       borderTopRightRadius: 20, // Agrega un borde superior
       borderTopLeftRadius: 20, // Agrega un borde superior
       backgroundColor: '#3393FF', // Cambia el color de fondo de la barra
-      height: 70, // Aumenta la altura de la barra
+      height: 60, // Aumenta la altura de la barra
     },
     tabBarLabelStyle: {
       fontSize: 16, // Cambia el tamaño de la etiqueta del ícono
     },
     tabBarActiveTintColor: 'white', // Cambia el color del ícono activo y el texto
-    tabBarInactiveTintColor: 'gray', // Cambia el color del ícono inactivo y el texto
+    tabBarInactiveTintColor: '#D3D3D3', // Cambia el color del ícono inactivo y el texto
   }}
    style={styles.container}>
       {/* <Tabbotton.Screen name="Inicio"
@@ -50,7 +50,7 @@ const Rutas = () => {
                 },
                 headerTintColor:'#fff',
                 tabBarIcon: ({ color }) => (
-                    <AntDesign name="home" size={35} color={color} style={{ marginBottom: -15 }}/>
+                    <AntDesign name="home" size={30} color={color} style={{ marginBottom: -15 }}/>
                 )
             }}
              />
@@ -65,7 +65,7 @@ const Rutas = () => {
                 },
                 headerTintColor:'#fff',
                 tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name="registered-trademark" size={35} color={color} style={{ marginBottom: -15 }} />
+                    <MaterialCommunityIcons name="registered-trademark" size={30} color={color} style={{ marginBottom: -15 }} />
                 )
             }} />
             <Tabbotton.Screen name="Pagos" component={Pagos} 
@@ -79,7 +79,7 @@ const Rutas = () => {
                 },
                 headerTintColor:'#fff',
                 tabBarIcon: ({ color }) => (
-                    <FontAwesome5 name="dollar-sign" size={35} color={color} style={{ marginBottom: -15 }} />
+                    <FontAwesome5 name="dollar-sign" size={30} color={color} style={{ marginBottom: -15 }} />
                 )
             }} />
             <Tabbotton.Screen name="Clientes" component={Clientes} 
@@ -93,7 +93,7 @@ const Rutas = () => {
                 },
                 headerTintColor:'#fff',
                 tabBarIcon: ({ color }) => (
-                    <FontAwesome5 name="users" size={35} color={color} style={{ marginBottom: -15 }} />
+                    <FontAwesome5 name="users" size={30} color={color} style={{ marginBottom: -15 }} />
                 )
             }} />
       <Tabbotton.Screen name="Ayuda"
@@ -104,7 +104,7 @@ const Rutas = () => {
              headerTitleAlign: 'center', // Centra el título
             title: "",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="help-box" size={35} color={color} style={{ marginBottom: -15 }} />
+            <MaterialCommunityIcons name="help-box" size={30} color={color} style={{ marginBottom: -15 }} />
           ),
         }} />
     </Tabbotton.Navigator>
