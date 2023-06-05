@@ -191,22 +191,15 @@ const Registro = () => {
         />
         <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5 }}>
   <LinearGradient
-    colors={['#83baf2', '#ffffff']}
-    style={[
-      styles.box,
-      {
-        width: '50%',
-        height: 70,
-        margin: 10,
-        marginLeft: 95,
-        flexDirection: 'row', // Añade esta línea para alinear el icono y el texto en fila
-        alignItems: 'center', // Añade esta línea para centrar verticalmente el contenido
-      },
-    ]}
-  >
-    <Ionicons name="send" size={30} color="white" />
-    <Text  style={[styles.textlogo,{paddingLeft:7}]}>Registrar Entrada</Text>
-  </LinearGradient>
+        colors={['#090979', '#00d4ff']}
+        // colors={['#FF9800', '#F44336']}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.button}
+      >
+        <Ionicons name="send" size={24} color="white" />
+        <Text style={styles.buttonText}>Registrar Entrada</Text>
+      </LinearGradient>
 </TouchableOpacity>
 
             <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
@@ -219,6 +212,22 @@ const Registro = () => {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    width: '50%',
+    margin: 10,
+    marginLeft: 95,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 8,
+  },
   containermodal: {
     flex: 1,
     backgroundColor: '#fff',

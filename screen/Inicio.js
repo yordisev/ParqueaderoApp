@@ -234,22 +234,14 @@ const Inicio = () => {
                
                 <TouchableOpacity onPress={() => Salida(datospagar,'P')} style={{ paddingRight: 5 }}>
   <LinearGradient
-    colors={['#83baf2', '#ffffff']}
-    style={[
-      styles.box,
-      {
-        width: '50%',
-        height: 70,
-        margin: 10,
-        marginLeft: 95,
-        flexDirection: 'row', // Añade esta línea para alinear el icono y el texto en fila
-        alignItems: 'center', // Añade esta línea para centrar verticalmente el contenido
-      },
-    ]}
-  >
-    <Ionicons name="send" size={20} color="white" />
-    <Text  style={[styles.textlogo,{paddingLeft:7}]}>Realizar Pago</Text>
-  </LinearGradient>
+        colors={['#FF9800', '#F44336']}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.button}
+      >
+        <Ionicons name="send" size={24} color="white" />
+        <Text style={styles.buttonText}>Realizar Pago</Text>
+      </LinearGradient>
 </TouchableOpacity>
                 </Animatable.View>
                 <Button  title="Cancelar" onPress={() => setModalVisible(false)} />
@@ -261,6 +253,22 @@ const Inicio = () => {
     ))
 }
 const styles = StyleSheet.create({
+  button: {
+    width: '50%',
+    margin: 10,
+    marginLeft: 95,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 8,
+  },
   contenido: {
     backgroundColor: '#A0C4F9',
     padding: 20,
