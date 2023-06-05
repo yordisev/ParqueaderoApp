@@ -87,7 +87,9 @@ const Inicio = () => {
           <ScrollView>
             <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                colors={['#3393FF', '#00d4ff']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
@@ -96,7 +98,9 @@ const Inicio = () => {
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                colors={['#d53369', '#daae51']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
@@ -105,7 +109,9 @@ const Inicio = () => {
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                colors={['#00d2ff', '#3a47d5']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
