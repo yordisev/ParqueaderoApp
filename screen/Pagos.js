@@ -111,7 +111,11 @@ const Pagos = () => {
                     </View>
                     {verdatos ? (
                         <>
-                        <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+                        <LinearGradient 
+                        colors={['#090979', '#00d4ff']}
+                        start={[0, 0.5]}
+                        end={[1, 0.5]}
+                        style={[styles.box, {
                         width: '60%',
                         height: 110,
                         margin:10,
@@ -178,7 +182,11 @@ const Pagos = () => {
                 <View>
                     <TouchableOpacity style={styles.pagar}
                     onPress={() => {vermodal()}}>
-                <LinearGradient colors={['#3393FF', '#fff']} style={styles.pagar}>
+                <LinearGradient 
+                 colors={['#090979', '#00d4ff']}
+                 start={[0, 0.5]}
+                 end={[1, 0.5]}
+                style={styles.pagar}>
                     <Text style={[styles.textSign, {color:'#fff'}]}>Pagar Todo</Text>
                 </LinearGradient>
                 </TouchableOpacity>
@@ -276,7 +284,11 @@ const Pagos = () => {
                         <FontAwesome5 name='hashtag' size={25} color="black" />
                         </View>
                     </View>
-                    <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+                    <LinearGradient 
+                     colors={['#090979', '#00d4ff']}
+                     start={[0, 0.5]}
+                     end={[1, 0.5]}
+                    style={[styles.box, {
           width: '60%',
           height: 110,
           margin:10,
@@ -287,7 +299,7 @@ const Pagos = () => {
             </Text>
         </LinearGradient>
         <TouchableOpacity onPress={() => RealizarPago(datosdelmodal,resultado)} style={{ paddingRight: 5, }}>
-          <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+          {/* <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
           width: '60%',
           height: 110,
           margin:10,
@@ -297,7 +309,16 @@ const Pagos = () => {
         <Text style={styles.textlogo}>
                 Pagar
             </Text>
-        </LinearGradient>
+        </LinearGradient> */}
+        <LinearGradient
+        colors={['#FF9800', '#F44336']}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.button}
+      >
+        <Ionicons name="save" size={24} color="white" />
+        <Text style={styles.buttonText}>Realizar Pago</Text>
+      </LinearGradient>
         </TouchableOpacity>
             <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
           </View>
@@ -413,6 +434,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     color: 'white',
+},
+button: {
+  width: '50%',
+  margin: 10,
+  marginLeft: 100,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+},
+buttonText: {
+  color: 'white',
+  fontSize: 18,
+  marginLeft: 8,
 },
 });
 export default Pagos
