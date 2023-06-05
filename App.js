@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import TabNavigation from './navigation/TabNavigation';
+// import TabNavigation from './navigation/TabNavigation';
+import Rutas from './navigation/Rutas';
 import RutaPrincipal from './rutaslogin/RutaPrincipal';
 import AuthProvider,{useAuth} from './ValidarLogin';
 
@@ -12,11 +13,11 @@ const Acceso = () => {
   if(!user){
       return(
         // <RutaPrincipal/>
-        <TabNavigation />
+        <Rutas />
       );
   }
   return (
-        <TabNavigation />
+        <Rutas />
   )
 }
 const App = () => {
