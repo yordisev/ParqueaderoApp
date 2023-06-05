@@ -203,7 +203,9 @@ const Inicio = () => {
                 </View>
                 <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                colors={['#3393FF', '#00d4ff']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <MaterialCommunityIcons style={[styles.centeredIcono]} name="login" size={30} color="#fff" />
@@ -215,7 +217,9 @@ const Inicio = () => {
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                 colors={['#d53369', '#daae51']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <MaterialCommunityIcons style={[styles.centeredIcono]} name="logout" size={30} color="#fff" />
@@ -226,7 +230,13 @@ const Inicio = () => {
                 {datospagar.Hora_salida}
                 </Animatable.Text>
               </LinearGradient>
-              <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
+              <LinearGradient 
+              // colors={['#b29f94', '#603813']}
+              // colors={['#2193b0', '#6dd5ed']}
+              colors={['#1488CC', '#6FB1FC']}
+              start={[0, 0.5]}
+                end={[1, 0.5]}
+              style={[styles.box, {
                   width: '60%',
                   height: 110,
                   margin: 10,
