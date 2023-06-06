@@ -47,7 +47,7 @@ const Clientes = () => {
     nombre:datos.nombre+' '+datos.apellido,
     placa:datos.placa,
     celular:datos.celular,
-    estado:datos.esatdo,
+    estado:datos.estado,
     })
     setModalVisible(true);
   }
@@ -169,6 +169,8 @@ const Clientes = () => {
                     return <Picker.Item key={index} label={cr.dato} value={cr.valor} />
                   })
                 }
+                {/* <Picker.Item label="Java" value="java" />
+          <Picker.Item label="JavaScript" value="js" /> */}
               </Picker>
       </View>
         <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
