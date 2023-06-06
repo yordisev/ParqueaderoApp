@@ -132,7 +132,7 @@ const Clientes = () => {
           <View style={styles.containermodal}>
           <View style={{alignItems: "center",paddingBottom: 30}}>
               <Text style={{
-                  color: '#fff',
+                  color: '#5092FE',
                   fontSize: 25,
                   fontWeight: 'bold',
                   textTransform: 'uppercase', justifyContent: 'center',
