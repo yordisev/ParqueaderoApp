@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text,StyleSheet } from 'react-native'
 
-const Islas = () => {
+const AgregarCliente = () => {
   return (
     <View style={styles.container}>
       
-      <Text>Islas</Text>
+      <Text>AgregarCliente</Text>
     </View>
   )
 }
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     },
   });
-export default Islas
+export default AgregarCliente

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
@@ -6,6 +6,8 @@ import { FontAwesome5,MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import DropdownAlert from 'react-native-dropdownalert';
 import { listarsalidacarros, RegistroSalida, RealizarCalculo } from '../api'
 
 const Inicio = () => {
@@ -15,27 +17,29 @@ const Inicio = () => {
   const [filtrardatos, setfiltrardatos] = useState([]);
   const [datospagar, setdatospagar] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [confirmarVisible, setConfirmarVisible] = useState(false);
+  let dropDownAlertRef = useRef();
 
   useEffect(() => {
     Cargarlista()
   }, [isFocused])
   const Cargarlista = async () => {
-    Cargando(true);
+    // Cargando(true);
     const datosoptenidos = await listarsalidacarros()
     setfiltrardatos(datosoptenidos)
-    Cargando(false);
+    // Cargando(false);
   }
-  const alerta = (datos, accion) => {
-    Alert.alert(
-      '',
-      'Desea darle Salida',
-      [
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        { text: 'OK', onPress: () => Salida(datos, accion) },
-      ],
-      { cancelable: false }
-    )
-  }
+  // const alerta = (datos, accion) => {
+  //   Alert.alert(
+  //     '',
+  //     'Desea darle Salida',
+  //     [
+  //       { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+  //       { text: 'OK', onPress: () => Salida(datos, accion) },
+  //     ],
+  //     { cancelable: false }
+  //   )
+  // }
   const vermodal = (codigo) => {
     setModalVisible(true);
     Calcularpago(codigo);
@@ -49,28 +53,34 @@ const Inicio = () => {
       console.error(error)
     }
   }
+  showAlert = () => {
+    setConfirmarVisible(true)
+  };
   const Salida = async (datos, accion) => {
     try {
       const salidavehiculos = await RegistroSalida(datos, accion)
       const respuesta = JSON.parse(salidavehiculos[0].salida);
       setModalVisible(false);
+      setConfirmarVisible(false);
       if (respuesta.CODIGO == 0) {
-        Dialog.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Success',
-          textBody: respuesta.MENSAJE,
-          button: 'close',
-        })
+        // Dialog.show({
+        //   type: ALERT_TYPE.SUCCESS,
+        //   title: 'Success',
+        //   textBody: respuesta.MENSAJE,
+        //   button: 'close',
+        // })
+        dropDownAlertRef.alertWithType('success', 'Exitoso', respuesta.MENSAJE);
         setTimeout(() => {
           Cargarlista()
         }, 1000);
       } else {
-        Dialog.show({
-          type: ALERT_TYPE.DANGER,
-          title: 'Error',
-          textBody: respuesta.MENSAJE,
-          button: 'close',
-        })
+        // Dialog.show({
+        //   type: ALERT_TYPE.DANGER,
+        //   title: 'Error',
+        //   textBody: respuesta.MENSAJE,
+        //   button: 'close',
+        // })
+        dropDownAlertRef.alertWithType('error', 'Error', respuesta.MENSAJE);
       }
     } catch (error) {
       console.error(error)
@@ -248,7 +258,7 @@ const Inicio = () => {
             </Animatable.View>
             <Animatable.View animation="fadeInUp">
                
-                <TouchableOpacity onPress={() => Salida(datospagar,'P')} style={{ paddingRight: 5 }}>
+                <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
   <LinearGradient
         colors={['#FF9800', '#F44336']}
         start={[0, 0.5]}
@@ -263,6 +273,29 @@ const Inicio = () => {
                 <Button  title="Cancelar" onPress={() => setModalVisible(false)} />
               </View>
             </Modal>
+            <AwesomeAlert
+          show={confirmarVisible}
+          showProgress={false}
+          progressSize="large"
+          progressColor="blue"
+          title="Confirmar"
+          message="Desea Registrar pago"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancelar"
+          cancelButtonColor="#F42A2A"
+          confirmText="Si, Registrar"
+          confirmButtonColor="#2A4CF4"
+          onCancelPressed={() => setConfirmarVisible(false)}
+          onConfirmPressed={() => Salida(datospagar,'P')}
+        />
+          <DropdownAlert  ref={(ref) => {
+          if (ref) {
+            dropDownAlertRef = ref;
+          }
+        }}/>
           </ScrollView>
         </SafeAreaView>
       </AlertNotificationRoot>

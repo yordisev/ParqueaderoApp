@@ -4,6 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import { buscarporplaca,buscarpagosrealizados,Realizarpagototal } from '../api'
 
 const Pagos = () => {
@@ -13,6 +14,7 @@ const Pagos = () => {
       const datosenviar = (name, value) => EnviarparaBuscar({...datosbuscar,[name]:value});
     
       const [filtrardatos, setfiltrardatos] = useState([]);
+      const [ocultar, setocultar] = useState(false);
       const [datosdelmodal, setdatosmodal] = useState([]);
       const [datospagados, setdatospagados] = useState([]);
       const [cargar, Cargando] = useState(false);
@@ -22,6 +24,7 @@ const Pagos = () => {
       const [modalVisible, setModalVisible] = useState(false);
       const [cantidaddias, setcantidaddias] = useState(0);
       const [resultado, setResultado] = useState(0);
+      const [confirmar, ConfirmarVisible] = useState(false);
 
     const updateSwitchData = value => {
         setSelectionMode(value);
@@ -39,8 +42,13 @@ const Pagos = () => {
             Cargando(true);
        try {
          const listadoPendiente = await buscarporplaca(datosbuscar)
-         setfiltrardatos(listadoPendiente)
-         setdatosmodal(listadoPendiente[0]);
+         if(listadoPendiente.length !=0){
+           setfiltrardatos(listadoPendiente)
+           setdatosmodal(listadoPendiente[0]);
+           setocultar(false);
+         }else{
+          setocultar(true);
+         }
          const listadoPagados = await buscarpagosrealizados(datosbuscar)
          setdatospagados(listadoPagados)
          Cargando(false);
@@ -59,11 +67,16 @@ const Pagos = () => {
         const multiplicado = parseFloat(valor) * datosdelmodal.monto_a_cancelar;
         setResultado(multiplicado.toString());
       };
+      showAlert = () => {
+        ConfirmarVisible(true)
+      };
       const RealizarPago = async (datos, valorpagar) => {
         try {
           const salidavehiculos = await Realizarpagototal(datos, valorpagar,cantidaddias)
           const respuesta = JSON.parse(salidavehiculos[0].salida);
+          ConfirmarVisible(false);
           setModalVisible(false);
+          setverdatos(false);
           if (respuesta.CODIGO == 0) {
             Dialog.show({
               type: ALERT_TYPE.SUCCESS,
@@ -177,19 +190,33 @@ const Pagos = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                   
                     {gamesTab == 1 &&  
-                <View>
-                    <TouchableOpacity style={styles.pagar}
-                    onPress={() => {vermodal()}}>
-                <LinearGradient 
-                 colors={['#090979', '#00d4ff']}
-                 start={[0, 0.5]}
-                 end={[1, 0.5]}
-                style={styles.pagar}>
-                    <Text style={[styles.textSign, {color:'#fff'}]}>Pagar Todo</Text>
-                </LinearGradient>
-                </TouchableOpacity>
+                    
+                    
+                    <View>
+                    { ocultar ? (
+                            <View>
+                            <LinearGradient 
+                              colors={['#090979', '#00d4ff']}
+                              start={[0, 0.5]}
+                              end={[1, 0.5]}
+                              style={styles.pagar}>
+                      <Text style={[styles.textSign, {color:'#fff'}]}>No Debe</Text>
+                  </LinearGradient>
+                        </View>
+                     ):(
+                      <TouchableOpacity style={styles.pagar}
+                      onPress={() => {vermodal()}}>
+                  <LinearGradient 
+                   colors={['#090979', '#00d4ff']}
+                   start={[0, 0.5]}
+                   end={[1, 0.5]}
+                  style={styles.pagar}>
+                      <Text style={[styles.textSign, {color:'#fff'}]}>Pagar Todo</Text>
+                  </LinearGradient>
+                  </TouchableOpacity>
+                     )  }                
+              
                 {filtrardatos.map(item => (
                   <View style={[styles.contenido]} key={item.id_en_sa}>
                     <View>
@@ -208,7 +235,7 @@ const Pagos = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between'
                     }}>
-                      <TouchableOpacity onPress={() => alerta(item, 'P')}>
+                      {/* <TouchableOpacity onPress={() => alerta(item, 'P')}>
                         <LinearGradient
                           colors={['#3393FF', '#fff']}
                           style={{
@@ -220,12 +247,12 @@ const Pagos = () => {
                         >
                           <FontAwesome5 style={[styles.centeredIcono]} name="dollar-sign" size={15} color="#fff" />
                         </LinearGradient>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                   </View>
                 ))}
               </View>
-                
+                  // )
                 }
                     {gamesTab == 2 && 
                      <View>
@@ -298,18 +325,7 @@ const Pagos = () => {
                 Pagar: ${resultado}
             </Text>
         </LinearGradient>
-        <TouchableOpacity onPress={() => RealizarPago(datosdelmodal,resultado)} style={{ paddingRight: 5, }}>
-          {/* <LinearGradient colors={['#83baf2', '#ffffff']} style={[styles.box, {
-          width: '60%',
-          height: 110,
-          margin:10,
-          marginLeft:85,
-        }]}>
-        <Ionicons name="save" size={50} color="white" />
-        <Text style={styles.textlogo}>
-                Pagar
-            </Text>
-        </LinearGradient> */}
+        <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5, }}>
         <LinearGradient
         colors={['#FF9800', '#F44336']}
         start={[0, 0.5]}
@@ -323,6 +339,24 @@ const Pagos = () => {
             <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
           </View>
       </Modal>
+      <AwesomeAlert
+          show={confirmar}
+          showProgress={false}
+          progressSize="large"
+          progressColor="blue"
+          title="Confirmar"
+          message="Desea Registrar pago"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancelar"
+          cancelButtonColor="#F42A2A"
+          confirmText="Si, Registrar"
+          confirmButtonColor="#2A4CF4"
+          onCancelPressed={() => ConfirmarVisible(false)}
+          onConfirmPressed={() => RealizarPago(datosdelmodal,resultado)}
+        />
                 </ScrollView>
             </SafeAreaView>
             </AlertNotificationRoot>
