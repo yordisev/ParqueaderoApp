@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 1,
   },
   scrollContentContainer: {
     alignItems: "center",
