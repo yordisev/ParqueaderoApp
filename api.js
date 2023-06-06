@@ -84,6 +84,17 @@ export const RealizarPagoPorDias= async (datos,valor) => {
   return resultado;
 }
 
+export const ListadoClientes = async (codigo) => {
+  const result =  await fetch(`${API}listarclientes/${codigo.nombrecliente}`,{ method: "GET",headers: headersyordis})
+  const resultado = await result.json()
+  return resultado;
+}
+export const ActualizarCliente= async (datos) => {
+  const result =  await fetch(API+'actualizarclientes', { method: "POST",headers: headersyordis,body: JSON.stringify(datos)})
+  const resultado = await result.json()
+  return resultado;
+}
+
   export const accederalsistema = async (loginacceso) => {
     const result =  await fetch(API+'login', { method: "POST",headers: {
       Accept: "application/json",

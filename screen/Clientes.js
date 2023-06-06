@@ -1,13 +1,14 @@
-import React,{useState} from 'react'
+import React,{useState,useRef} from 'react'
 import { StyleSheet, Text, View,Button, TextInput, Modal, SafeAreaView, ScrollView,TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import {Dropdown} from 'react-native-element-dropdown';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from "@react-navigation/native";
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { buscarpornombre,listartodaslastarifas,RegistroEntrada } from '../api'
+import { Picker } from "@react-native-picker/picker";
+import AwesomeAlert from 'react-native-awesome-alerts';
+import DropdownAlert from 'react-native-dropdownalert';
+import { ListadoClientes,ActualizarCliente } from '../api'
 
 const Clientes = () => {
   const navigation = useNavigation()
@@ -17,21 +18,23 @@ const Clientes = () => {
   const datosenviar = (name, value) => Enviarloginacceso({...datosbuscar,[name]:value});
   const [filtrardatos, setfiltrardatos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [datosingreso, setdatosingresos] = useState([]);
-  const [valorDatos, setdatosvalor] = useState([]);
-  const [valorprecio, setvalor] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+  const [datosingreso, setdatosingresos] = useState({
+    id_cliente:'',
+    nombre:'',
+    placa:'',
+    celular:'',
+    estado:'',
+  });
+  const datosinput = (name, value) => setdatosingresos({...datosingreso,[name]:value});
+  const [cursos, serCursos] = useState([{valor:'A',dato:'Activo'}, {valor:'I',dato:'Inactivo'}])
+  const [confirmarVisible, setConfirmarVisible] = useState(false);
+  let dropDownAlertRef = useRef();
   const Buscar = async () => {
     if(datosbuscar.nombrecliente == '' || datosbuscar.nombrecliente == undefined || datosbuscar.nombrecliente == null){
-      Dialog.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'Entendido',
-        textBody: 'Por favor escriba un nombre o placa valido',
-        button: 'close',
-      })
+      dropDownAlertRef.alertWithType('warning', 'Entendido', 'Por favor escriba un nombre o placa valido');
     } else{
    try {
-     const listadonegocios = await buscarpornombre(datosbuscar)
+     const listadonegocios = await ListadoClientes(datosbuscar)
      setfiltrardatos(listadonegocios)
    } catch (error) {
     console.error(error)
@@ -39,48 +42,35 @@ const Clientes = () => {
   }
   }
   const vermodal = (datos) =>{
-    setdatosingresos(datos);
+    setdatosingresos({
+      id_cliente:datos.id_cliente,
+    nombre:datos.nombre+' '+datos.apellido,
+    placa:datos.placa,
+    celular:datos.celular,
+    estado:datos.esatdo,
+    })
     setModalVisible(true);
-    ListarTarifa()
   }
-  const ListarTarifa = async () => {
-    const datosoptenidos = await listartodaslastarifas()
-    var count = Object.keys(datosoptenidos).length;
-    let valores = [];
-    for (var i = 0; i < count; i++) {
-      valores.push({
-        value: datosoptenidos[i].precio,
-        label: datosoptenidos[i].precio,
-      });
-    }
-    setdatosvalor(valores);
-  }
-  const Entrada = async () => {
+  showAlert = () => {
+    setConfirmarVisible(true)
+  };
+  const EditarCliente = async () => {
     setModalVisible(false)
+    setConfirmarVisible(false);
     try {
-      const salidavehiculos = await RegistroEntrada(datosingreso,valorprecio)
+      const salidavehiculos = await ActualizarCliente(datosingreso)
       const respuesta = JSON.parse(salidavehiculos[0].salida);
+      setfiltrardatos([])
       if (respuesta.CODIGO == 0) {
-        Dialog.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Success',
-          textBody: respuesta.MENSAJE,
-          button: 'close',
-        })
+        dropDownAlertRef.alertWithType('success', 'Exitoso', respuesta.MENSAJE);
       } else {
-        Dialog.show({
-          type: ALERT_TYPE.DANGER,
-          title: 'Error',
-          textBody: respuesta.MENSAJE,
-          button: 'close',
-        })
+        dropDownAlertRef.alertWithType('error', 'Error', respuesta.MENSAJE);
       }
     } catch (error) {
       console.error(error)
     }
   }
   return (
-    <AlertNotificationRoot>
         <SafeAreaView style={styles.container}>
           <ScrollView
             contentContainerStyle={styles.scrollContentContainer}
@@ -110,7 +100,7 @@ const Clientes = () => {
 </View>
 <View style={{ padding: 10 }}>
               {filtrardatos.map(item => (
-                <Animatable.View animation="fadeInLeft"  style={[styles.contenido]} key={item.cedula}>
+                <Animatable.View animation="fadeInLeft"  style={[styles.contenido,{backgroundColor: item.estado === 'A' ? '#A0C4F9' : '#FF5555'}]} key={item.cedula}>
                   <View style={{ paddingRight: 5, }}>
                     <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
                     <Text style={styles.clasetitulo}>{item.placa}</Text>
@@ -121,7 +111,7 @@ const Clientes = () => {
                   </View>
                     <TouchableOpacity onPress={() => vermodal(item)} style={{ paddingRight: 5, }}>
                       <LinearGradient
-                        colors={['#FF4C33', '#fff']}
+                        colors={item.estado === 'A' ? ['#FF4C33', '#fff'] : ['#35A6F4', '#fff']}
                         style={{
                           backgroundColor: '#0aada8',
                           padding: 10,
@@ -129,7 +119,7 @@ const Clientes = () => {
                           borderRadius: 10,
                         }}
                       >
-                        <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
+                        <FontAwesome5 style={[styles.centeredIcono]} name="user-edit" size={15} color="#fff" />
                       </LinearGradient>
                     </TouchableOpacity>
                 </Animatable.View>
@@ -160,7 +150,10 @@ const Clientes = () => {
           <View style={styles.iconContainer}>
               <FontAwesome5 name="phone-alt" size={20}/>
           </View>
-          <Text style={styles.text}>{datosingreso.celular}</Text>
+          <TextInput style={styles.text}  
+          placeholderTextColor='#BDC3C7'
+          onChangeText={(text) => datosinput('celular',text)}
+          value={datosingreso.celular}/>
       </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
@@ -168,46 +161,56 @@ const Clientes = () => {
           </View>
           <Text style={styles.text}>{datosingreso.placa}</Text>
       </View>
-      <Dropdown
-          style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={valorDatos}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Seleccionar Precio' : '...'}
-          searchPlaceholder="Buscar..."
-          value={valorprecio}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setvalor(item.value);
-            setIsFocus(false);
-          }}
-        />
-        <TouchableOpacity onPress={() => Entrada()} style={{ paddingRight: 5 }}>
+          <View style={styles.dropdown}>
+          
+          <Picker selectedValue={datosingreso.estado} onValueChange={(itemValue) => datosinput('estado',itemValue)}>
+                {
+                  cursos.map((cr, index) => {
+                    return <Picker.Item key={index} label={cr.dato} value={cr.valor} />
+                  })
+                }
+              </Picker>
+      </View>
+        <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
   <LinearGradient
         colors={['#090979', '#00d4ff']}
-        // colors={['#FF9800', '#F44336']}
         start={[0, 0.5]}
         end={[1, 0.5]}
         style={styles.button}
       >
         <Ionicons name="send" size={24} color="white" />
-        <Text style={styles.buttonText}>Registrar Entrada</Text>
+        <Text style={styles.buttonText}>Actualizar</Text>
       </LinearGradient>
 </TouchableOpacity>
 
             <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
           </View>
       </Modal>
+      <AwesomeAlert
+          show={confirmarVisible}
+          showProgress={false}
+          progressSize="large"
+          progressColor="blue"
+          title="Si Actualizar"
+          message="Desea Actualizar Cliente"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="No, cancelar"
+          cancelButtonColor="#F42A2A"
+          confirmText="Si, Actualizar"
+          confirmButtonColor="#2A4CF4"
+          onCancelPressed={() => setConfirmarVisible(false)}
+          onConfirmPressed={() => EditarCliente()}
+        />
+      <DropdownAlert  ref={(ref) => {
+          if (ref) {
+            dropDownAlertRef = ref;
+          }
+        }}/>
           </ScrollView>
         </SafeAreaView>
-        </AlertNotificationRoot>
   );
 }
 
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contenido: {
-    backgroundColor: '#A0C4F9',
+    // backgroundColor: '#A0C4F9',
     padding: 20,
     marginVertical: 8,
     borderRadius: 12,
@@ -337,19 +340,15 @@ inputSearchStyle: {
   height: 40,
   fontSize: 16,
 },
-box: {
-  height: 200,
-  width: 100,
-  borderRadius: 5,
-  margin: 10,
-  backgroundColor: "#61dafb",
-  alignItems: "center",
-  justifyContent: "center"
-},
-textlogo: {
-  color: '#ffffff',
-  fontSize:17,
-  fontWeight: 'bold',
+dropdown: {
+  width: '85%',
+  height: 50,
+  borderColor: 'gray',
+  borderWidth: 0.5,
+  borderRadius: 8,
+  paddingHorizontal: 10,
+  marginLeft:30,
+  marginBottom: 10,
 },
 });
 
