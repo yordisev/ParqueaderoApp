@@ -89,6 +89,11 @@ export const ListadoClientes = async (codigo) => {
   const resultado = await result.json()
   return resultado;
 }
+export const GuardarCliente= async (datos) => {
+  const result =  await fetch(API+'registrarclientes', { method: "POST",headers: headersyordis,body: JSON.stringify(datos)})
+  const resultado = await result.json()
+  return resultado;
+}
 export const ActualizarCliente= async (datos) => {
   const result =  await fetch(API+'actualizarclientes', { method: "POST",headers: headersyordis,body: JSON.stringify(datos)})
   const resultado = await result.json()

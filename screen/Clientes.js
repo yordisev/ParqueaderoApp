@@ -4,14 +4,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
-import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import AwesomeAlert from 'react-native-awesome-alerts';
 import DropdownAlert from 'react-native-dropdownalert';
 import { ListadoClientes,ActualizarCliente } from '../api'
 
 const Clientes = () => {
-  const navigation = useNavigation()
   const [datosbuscar, Enviarloginacceso] =  useState({
     nombrecliente:'',
   })
