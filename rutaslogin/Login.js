@@ -1,16 +1,19 @@
 import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform, StyleSheet, StatusBar, Dimensions} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Platform, StyleSheet, StatusBar, Dimensions,NativeModules} from 'react-native';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { useTheme } from 'react-native-paper';
-import Users from '../model/users';
-import {useAuth} from '../ValidarLogin'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { accederalsistema } from '../api'
+// import {useAuth} from '../ValidarLogin'
 
 const Login = ({navigation}) => {
-    const [_, setUser] = useAuth();
+    const [confirmarVisible, setConfirmarVisible] = useState(false);
+    // const [_, setUser] = useAuth();
     const [data, setData] = useState({
         username: '',
         password: '',
@@ -76,11 +79,25 @@ const Login = ({navigation}) => {
         }
     }
 
-    const LoginAcceso = (userName, password) => {
-
-        const datousuario = Users.filter( item => {
-            return userName == item.username && password == item.password;
-        } );
+    const LoginAcceso = async (userName, password) => {
+        try {
+            const datousuario = await accederalsistema(userName,password)
+           if(datousuario.status == true){
+            setConfirmarVisible(true);
+            const jsonValue = JSON.stringify(datousuario)
+            await AsyncStorage.setItem('valores', jsonValue)
+            NativeModules.DevSettings.reload();
+           } else {
+            Dialog.show({
+                type: ALERT_TYPE.DANGER, //DANGER,WARNING
+                title: 'Error',
+                textBody: 'Usuario o Contraseña Incorrectas',
+                button: 'close',
+              })
+           }
+          } catch (error) {
+           console.error(error)
+          }
 
         if ( data.username.length == 0 || data.password.length == 0 ) {
                     Toast.show({
@@ -90,21 +107,6 @@ const Login = ({navigation}) => {
                     })
             return;
         }
-
-        if ( datousuario.length == 0 ) {
-            // Alert.alert('Invalid User!', 'Username or password is incorrect.', [
-            //     {text: 'Okay'}
-            // ]);
-            Dialog.show({
-                type: ALERT_TYPE.DANGER, //DANGER,WARNING
-                title: 'Error',
-                textBody: 'Usuario o Contraseña Incorrectas',
-                button: 'close',
-              })
-            return;
-        }
-        setUser(datousuario)
-        
     }
 
     return (
@@ -228,6 +230,24 @@ const Login = ({navigation}) => {
                 </TouchableOpacity>
             </View>
         </Animatable.View>
+        <AwesomeAlert
+          show={confirmarVisible}
+          showProgress={true}
+          progressSize="large"
+          progressColor="blue"
+          title="Por Favor Espere"
+          message="Iniciando Session"
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={false}
+          cancelText="No, cancelar"
+          cancelButtonColor="#F42A2A"
+          confirmText="Si, Actualizar"
+          confirmButtonColor="#2A4CF4"
+          onCancelPressed={() => setConfirmarVisible(false)}
+          onConfirmPressed={() => EditarCliente()}
+        />
       </View>
       </AlertNotificationRoot>
     );

@@ -1,70 +1,39 @@
-import React,{useRef,useState} from 'react'
-import { View, Text,StyleSheet,TouchableOpacity,Modal,Button } from 'react-native'
+import React,{useState} from 'react'
+import { View, Text,StyleSheet,Button,NativeModules } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import  Toast  from 'react-native-toast-message';
-import DropdownAlert from 'react-native-dropdownalert';
 
 const Ayuda = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  let dropDownAlertRef = useRef();
-  showAlert = () => {
-    setModalVisible(true)
-  };
-  hideAlert = () => {
-    setModalVisible(false)
-  };
-  aceptar = () => {
-    console.log("aceptarrr")
-    setModalVisible(false)
-  };
-  showToast = () => {
-    // Toast.hide();
-    Toast.show({
-      type:"success",
-      text1:"pruebas",
-      text2:"pruebas2",
-      position:"top",
-      autoHide:true,
-      visibilityTime:2500,
-     onShow:()=>{console.log("visible")},
-     onHide:()=>{console.log("hidden")},
-     onPress:()=>{console.log("precionado")}
-    })
-  };
-  showAlertDrown = () => {
-    dropDownAlertRef.alertWithType('success', 'Exitoso', 'aaaaaaaaaaaaaaa');
-  };
+  const [confirmarVisible, setConfirmarVisible] = useState(false);
+  cerrarSession = async () => {
+    setConfirmarVisible(true);
+    try {
+      await AsyncStorage.removeItem('valores');
+      NativeModules.DevSettings.reload();
+  }catch(exception) {
 
-
+  }
+  };
   return (
     <View style={styles.container}>
-      {/* <Button title="Ver Modal" onPress={() => setModalVisible(true)} /> */}
-      <Button title="Ver alert" onPress={() => showAlertDrown()} />
-      <DropdownAlert  ref={(ref) => {
-          if (ref) {
-            dropDownAlertRef = ref;
-          }
-        }}/>
-      <Button title="Ver Toast" onPress={() => showToast()} />
-      <Toast/>
-      <Button title="Ver Modal" onPress={() => showAlert()} />
+      <Button title="Cerrar Session" onPress={() => cerrarSession()} />
       <AwesomeAlert
-          show={modalVisible}
+          show={confirmarVisible}
           showProgress={true}
           progressSize="large"
           progressColor="blue"
-          title="AwesomeAlert"
-          message="I have a message for you!"
+          title="Por Favor Espere"
+          message="Cerrando session"
           closeOnTouchOutside={false}
           closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
-          cancelText="No, cancel"
+          showCancelButton={false}
+          showConfirmButton={false}
+          cancelText="No, cancelar"
           cancelButtonColor="#F42A2A"
-          confirmText="Yes, delete it"
+          confirmText="Si, Actualizar"
           confirmButtonColor="#2A4CF4"
-          onCancelPressed={() => hideAlert()}
-          onConfirmPressed={() => aceptar()}
+          onCancelPressed={() => setConfirmarVisible(false)}
+          onConfirmPressed={() => EditarCliente()}
         />
     </View>
   )

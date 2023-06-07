@@ -110,11 +110,12 @@ export const ActualizarTarifa= async (datos) => {
   const resultado = await result.json()
   return resultado;
 }
-  export const accederalsistema = async (loginacceso) => {
-    const result =  await fetch(API+'login', { method: "POST",headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },body: JSON.stringify(loginacceso)})
+  export const accederalsistema = async (usuario,clave) => {
+    loginacceso ={
+      usuario:usuario,
+      password:clave
+    }
+    const result =  await fetch(API+'login', { method: "POST",headers: headersyordis,body: JSON.stringify(loginacceso)})
     const resultado = await result.json()
       return resultado;
   }
