@@ -100,6 +100,16 @@ export const ActualizarCliente= async (datos) => {
   return resultado;
 }
 
+export const ListadoTarifas = async () => {
+  const result =  await fetch(API+'listartarifas', { method: "GET",headers: headersyordis})
+  const resultado = await result.json()
+       return resultado;
+}
+export const ActualizarTarifa= async (datos) => {
+  const result =  await fetch(API+'actualizartarifa', { method: "POST",headers: headersyordis,body: JSON.stringify(datos)})
+  const resultado = await result.json()
+  return resultado;
+}
   export const accederalsistema = async (loginacceso) => {
     const result =  await fetch(API+'login', { method: "POST",headers: {
       Accept: "application/json",

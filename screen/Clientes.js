@@ -171,6 +171,7 @@ const Clientes = () => {
           <Picker.Item label="JavaScript" value="js" /> */}
               </Picker>
       </View>
+      <View style={styles.containercolumnas}>
         <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
   <LinearGradient
         colors={['#090979', '#00d4ff']}
@@ -182,8 +183,18 @@ const Clientes = () => {
         <Text style={styles.buttonText}>Actualizar</Text>
       </LinearGradient>
 </TouchableOpacity>
-
-            <Button title="Cancelar" onPress={() => setModalVisible(false)}/>
+<TouchableOpacity onPress={()=> setModalVisible(false)} style={{ paddingRight: 5 }}>
+  <LinearGradient
+        colors={['#FF9800', '#F44336']}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={styles.button}
+      >
+        <Ionicons name="arrow-back-circle" size={24} color="white" />
+        <Text style={styles.buttonText}>Cancelar</Text>
+      </LinearGradient>
+</TouchableOpacity>
+</View>
           </View>
       </Modal>
       <AwesomeAlert
@@ -216,15 +227,21 @@ const Clientes = () => {
 
 const styles = StyleSheet.create({
   button: {
-    width: '50%',
+    width: 129,
     margin: 10,
-    marginLeft: 95,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  containercolumnas: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'white',

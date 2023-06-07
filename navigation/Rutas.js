@@ -31,7 +31,7 @@ function MenuCliente(){
                 headerTintColor:'#fff',
         headerRight: () =>(
           <TouchableOpacity style={styles.boton} onPress={()=> navigation.navigate('AgregarCliente')}>
-            <FontAwesome5 name='plus' size={34} color="#fff" />
+            <FontAwesome5 name='plus' size={28} color="#fff" />
           </TouchableOpacity>
         )
         })}
