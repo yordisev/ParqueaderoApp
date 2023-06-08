@@ -1,15 +1,25 @@
 import React,{useState} from 'react'
-import { View, Text,StyleSheet,Button,NativeModules } from 'react-native'
+import { View, Text,StyleSheet,Button } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { useNavigation } from '@react-navigation/native';
+import {useAuth} from '../ValidarLogin'
 
 const Ayuda = () => {
+  const [_, setUser] = useAuth();
+  const navigation = useNavigation();
   const [confirmarVisible, setConfirmarVisible] = useState(false);
   cerrarSession = async () => {
     setConfirmarVisible(true);
     try {
       await AsyncStorage.removeItem('valores');
-      NativeModules.DevSettings.reload();
+      setConfirmarVisible(false);
+      const datovacio = null;
+      setUser(datovacio)
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Inicio' }] // Reemplaza 'NuevaVista' con el nombre de tu vista de destino
+      });
   }catch(exception) {
 
   }

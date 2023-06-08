@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform, StyleSheet, StatusBar, Dimensions,NativeModules} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Platform, StyleSheet, StatusBar, Dimensions} from 'react-native';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,9 +9,12 @@ import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { accederalsistema } from '../api'
+import { useNavigation } from '@react-navigation/native';
+
 // import {useAuth} from '../ValidarLogin'
 
-const Login = ({navigation}) => {
+const Login = () => {
+    const navigation = useNavigation();
     const [confirmarVisible, setConfirmarVisible] = useState(false);
     // const [_, setUser] = useAuth();
     const [data, setData] = useState({
@@ -86,7 +89,11 @@ const Login = ({navigation}) => {
             setConfirmarVisible(true);
             const jsonValue = JSON.stringify(datousuario)
             await AsyncStorage.setItem('valores', jsonValue)
-            NativeModules.DevSettings.reload();
+            setConfirmarVisible(false);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Inicio' }] // Reemplaza 'NuevaVista' con el nombre de tu vista de destino
+              });
            } else {
             Dialog.show({
                 type: ALERT_TYPE.DANGER, //DANGER,WARNING
