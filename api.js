@@ -13,6 +13,12 @@ const obtenerValorAsyncStorage = async () => {
   return headersyordis;
 };
 
+export const listardisponibles= async () => {
+  const headersyordis = await obtenerValorAsyncStorage();
+  const result =  await fetch(API+'listardisponibilidad', { method: "GET",headers: headersyordis})
+  const resultado = await result.json()
+       return resultado;
+}
 export const listarsalidacarros = async () => {
   const headersyordis = await obtenerValorAsyncStorage();
   const result =  await fetch(API+'listarsalida', { method: "GET",headers: headersyordis})

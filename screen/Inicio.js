@@ -8,12 +8,13 @@ import * as Animatable from 'react-native-animatable';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import DropdownAlert from 'react-native-dropdownalert';
-import { listarsalidacarros, RegistroSalida, RealizarCalculo } from '../api'
+import { listardisponibles, listarsalidacarros, RegistroSalida, RealizarCalculo } from '../api'
 
 const Inicio = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [cargar, Cargando] = useState(false);
+  const [totaldisponible, settotaldisponible] = useState([]);
   const [filtrardatos, setfiltrardatos] = useState([]);
   const [datospagar, setdatospagar] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,6 +26,8 @@ const Inicio = () => {
   }, [isFocused])
   const Cargarlista = async () => {
     // Cargando(true);
+    const disponibilidad = await listardisponibles()
+    settotaldisponible(disponibilidad)
     const datosoptenidos = await listarsalidacarros()
     setfiltrardatos(datosoptenidos)
     // Cargando(false);
@@ -97,14 +100,14 @@ const Inicio = () => {
           <ScrollView>
             <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
               <LinearGradient
-                colors={['#3393FF', '#00d4ff']}
+                colors={['#d53369', '#daae51']}
                 start={[0, 0.5]}
                 end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Total Motos
+                  Total Motos - {totaldisponible[1].cantidad}
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
@@ -115,7 +118,7 @@ const Inicio = () => {
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles
+                  Disponibles - {totaldisponible[1].disponibles}
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
@@ -126,16 +129,18 @@ const Inicio = () => {
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Total Carros
+                  Total Carros - {totaldisponible[0].cantidad}
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
-                colors={['#3393FF', '#fff']}
+                colors={['#00d2ff', '#3a47d5']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles
+                  Disponibles - {totaldisponible[0].disponibles}
                 </Animatable.Text>
               </LinearGradient>
             </Animatable.View>
