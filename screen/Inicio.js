@@ -99,18 +99,20 @@ const Inicio = () => {
         <SafeAreaView style={styles.container}>
           <ScrollView>
             <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
-              <LinearGradient
-                colors={['#d53369', '#daae51']}
+            {totaldisponible.map(data => (
+              <LinearGradient key={data.tipo_isla}
+              colors={data.tipo_isla === 'M' ? ['#d53369', '#daae51'] : ['#00d2ff', '#3a47d5']}
                 start={[0, 0.5]}
                 end={[1, 0.5]}
                 style={[styles.example, { borderRadius: 20 }]}
               >
-                <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
+                <FontAwesome5 style={[styles.centeredIcono]} name={data.tipo_isla === 'M' ? 'motorcycle' : 'car'} size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Total Motos - {totaldisponible[1].cantidad}
+                  {data.cantidad} / {data.ocupados}
                 </Animatable.Text>
               </LinearGradient>
-              <LinearGradient
+              ))}
+              {/* <LinearGradient
                 colors={['#d53369', '#daae51']}
                 start={[0, 0.5]}
                 end={[1, 0.5]}
@@ -118,7 +120,7 @@ const Inicio = () => {
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles - {totaldisponible[1].disponibles}
+                  Disponibles - {totaldisponible[0].cantidad - totaldisponible[0].ocupados}
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
@@ -129,7 +131,7 @@ const Inicio = () => {
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Total Carros - {totaldisponible[0].cantidad}
+                  Total Carros - {totaldisponible[1].ocupados}
                 </Animatable.Text>
               </LinearGradient>
               <LinearGradient
@@ -140,9 +142,9 @@ const Inicio = () => {
               >
                 <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
                 <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles - {totaldisponible[0].disponibles}
+                  Disponibles - {totaldisponible[1].cantidad - totaldisponible[1].ocupados}
                 </Animatable.Text>
-              </LinearGradient>
+              </LinearGradient> */}
             </Animatable.View>
             <View style={{ padding: 30 }}>
               {filtrardatos.map(item => (

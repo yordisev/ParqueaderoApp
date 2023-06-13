@@ -62,7 +62,8 @@ export const RegistroEntrada = async (datos,valor) => {
   const datosenviar = {
     cliente:datos.cedula,
     v_precio_pagar:valor,
-    placa:datos.placa
+    placa:datos.placa,
+    tipo_vehiculo:datos.tipo_vehiculo
   }
   const result =  await fetch(API+'realizarentrada', { method: "POST",headers: headersyordis,body: JSON.stringify(datosenviar)})
   const resultado = await result.json()
