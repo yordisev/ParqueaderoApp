@@ -4,7 +4,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 // import TabNavigation from './navigation/TabNavigation';
 import Rutas from './navigation/Rutas';
-import RutaPrincipal from './rutaslogin/RutaPrincipal';
+// import RutaPrincipal from './rutaslogin/RutaPrincipal';
+import Login from './rutaslogin/Login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from "@react-navigation/native";
 import AuthProvider,{useAuth} from './ValidarLogin';
@@ -30,7 +31,7 @@ const Acceso = () => {
   const [user] = useAuth();
   if(!user){
       return(
-        <RutaPrincipal/>
+        <Login getData={getData}/>
       );
   }
   return (

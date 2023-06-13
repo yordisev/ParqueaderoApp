@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 
 // import {useAuth} from '../ValidarLogin'
 
-const Login = () => {
+const Login = (props) => {
     const navigation = useNavigation();
     const [confirmarVisible, setConfirmarVisible] = useState(false);
     // const [_, setUser] = useAuth();
@@ -90,10 +90,7 @@ const Login = () => {
             const jsonValue = JSON.stringify(datousuario)
             await AsyncStorage.setItem('valores', jsonValue)
             setConfirmarVisible(false);
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Inicio' }] // Reemplaza 'NuevaVista' con el nombre de tu vista de destino
-              });
+            props.getData()
            } else {
             Dialog.show({
                 type: ALERT_TYPE.DANGER, //DANGER,WARNING
