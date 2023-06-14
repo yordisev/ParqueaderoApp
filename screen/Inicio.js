@@ -110,7 +110,10 @@ const Inicio = () => {
                 >
                   <FontAwesome5 style={[styles.centeredIcono]} name={data.tipo_isla === 'M' ? 'motorcycle' : 'car'} size={30} color="#fff" />
                   <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                    {data.cantidad} / {data.ocupados}
+                  {data.ocupados} /  {data.cantidad}
+                  </Animatable.Text>
+                  <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                  {data.cantidad - data.ocupados}
                   </Animatable.Text>
                 </LinearGradient>
               ))}
