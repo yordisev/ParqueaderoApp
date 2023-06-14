@@ -124,24 +124,6 @@ const Pagos = () => {
                     </View>
                     {verdatos ? (
                         <>
-                        <LinearGradient 
-                        colors={['#090979', '#00d4ff']}
-                        start={[0, 0.5]}
-                        end={[1, 0.5]}
-                        style={[styles.box, {
-                        width: '60%',
-                        height: 110,
-                        margin:10,
-                        marginLeft:85,
-                        }]}>
-                        <FontAwesome5 name="comment-dollar" size={50} color="white" />
-                        <Text style={styles.textlogo}>
-                                Total Debe
-                            </Text>
-                        <Text style={styles.textlogo}>
-                                $ 500.000
-                            </Text>
-                        </LinearGradient>
                     <View
                         style={{
                             height: 44,
@@ -287,6 +269,21 @@ const Pagos = () => {
                   Datos del Cliente
                 </Text>
                 </View>
+                <LinearGradient 
+                        colors={['#090979', '#00d4ff']}
+                        start={[0, 0.5]}
+                        end={[1, 0.5]}
+                        style={[styles.box, {
+                        width: '60%',
+                        height: 110,
+                        margin:10,
+                        marginLeft:85,
+                        }]}>
+                        <FontAwesome5 name="comment-dollar" size={30} color="white" />
+                        <Text style={styles.textlogo}>Precio Diario: $ {datosdelmodal.monto_a_cancelar}</Text>
+                        <Text style={styles.textlogo}>Total Dias: {filtrardatos.length}</Text>
+                        <Text style={styles.textlogo}>Total Debe: {datosdelmodal.monto_a_cancelar * filtrardatos.length}</Text>
+                        </LinearGradient>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
               <FontAwesome5 name="user-alt" size={20}/>
