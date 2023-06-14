@@ -1,8 +1,8 @@
-import React, { useEffect, useState,useRef } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView,TextInput, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react'
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TextInput, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { FontAwesome5,MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
@@ -23,17 +23,17 @@ const Inicio = () => {
   let dropDownAlertRef = useRef();
 
   const filtrarcliente = (text) => {
-  if(text){
-const nuevosdatos = datos.filter(item => {
-const datosfiltrados = item.nombre ? item.nombre.toUpperCase() :''.toUpperCase();
-const datosdeimput = text.toUpperCase();
-return datosfiltrados.indexOf(datosdeimput) > -1;
-})
-setfiltrardatos(nuevosdatos)
-  }else {
-    setfiltrardatos(datos)
+    if (text) {
+      const nuevosdatos = datos.filter(item => {
+        const datosfiltrados = item.nombre ? item.nombre.toUpperCase() : ''.toUpperCase();
+        const datosdeimput = text.toUpperCase();
+        return datosfiltrados.indexOf(datosdeimput) > -1;
+      })
+      setfiltrardatos(nuevosdatos)
+    } else {
+      setfiltrardatos(datos)
+    }
   }
-}
   useEffect(() => {
     Cargarlista()
   }, [isFocused])
@@ -101,18 +101,18 @@ setfiltrardatos(nuevosdatos)
         <SafeAreaView style={styles.container}>
           <ScrollView>
             <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
-            {totaldisponible.map(data => (
-              <LinearGradient key={data.tipo_isla}
-              colors={data.tipo_isla === 'M' ? ['#d53369', '#daae51'] : ['#00d2ff', '#3a47d5']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <FontAwesome5 style={[styles.centeredIcono]} name={data.tipo_isla === 'M' ? 'motorcycle' : 'car'} size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  {data.cantidad} / {data.ocupados}
-                </Animatable.Text>
-              </LinearGradient>
+              {totaldisponible.map(data => (
+                <LinearGradient key={data.tipo_isla}
+                  colors={data.tipo_isla === 'M' ? ['#d53369', '#daae51'] : ['#00d2ff', '#3a47d5']}
+                  start={[0, 0.5]}
+                  end={[1, 0.5]}
+                  style={[styles.example, { borderRadius: 20 }]}
+                >
+                  <FontAwesome5 style={[styles.centeredIcono]} name={data.tipo_isla === 'M' ? 'motorcycle' : 'car'} size={30} color="#fff" />
+                  <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                    {data.cantidad} / {data.ocupados}
+                  </Animatable.Text>
+                </LinearGradient>
               ))}
               {/* <LinearGradient
                 colors={['#d53369', '#daae51']}
@@ -149,18 +149,18 @@ setfiltrardatos(nuevosdatos)
               </LinearGradient> */}
             </Animatable.View>
             <View style={styles.inputContainer}>
-  <TextInput
-    style={styles.input}
-    placeholder="Buscar"
-    placeholderTextColor="#BDC3C7"
-    onChange={(event) => filtrarcliente(event.nativeEvent.text)}
-  />
-  <TouchableOpacity
-    style={styles.icon}
-  >
-    <Ionicons name='search' size={25} color="black" />
-  </TouchableOpacity>
-</View>
+              <TextInput
+                style={styles.input}
+                placeholder="Buscar"
+                placeholderTextColor="#BDC3C7"
+                onChange={(event) => filtrarcliente(event.nativeEvent.text)}
+              />
+              <TouchableOpacity
+                style={styles.icon}
+              >
+                <Ionicons name='search' size={25} color="black" />
+              </TouchableOpacity>
+            </View>
             <View style={{ padding: 20 }}>
               {filtrardatos.map(item => (
                 <Animatable.View animation="fadeInLeft" style={[styles.contenido]} key={item.id_en_sa}>
@@ -211,15 +211,15 @@ setfiltrardatos(nuevosdatos)
               visible={modalVisible}
               onRequestClose={() => setModalVisible(false)}>
               <View style={styles.containermodal}>
-                <View style={{alignItems: "center",paddingBottom: 30}}>
-              <Text style={{
-                  color: '#fff',
-                  fontSize: 25,
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase', justifyContent: 'center',
-                }}>
-                  Datos del Cliente
-                </Text>
+                <View style={{ alignItems: "center", paddingBottom: 30 }}>
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase', justifyContent: 'center',
+                  }}>
+                    Datos del Cliente
+                  </Text>
                 </View>
                 <View style={styles.containerotro}>
                   <View style={styles.iconContainer}>
@@ -234,90 +234,90 @@ setfiltrardatos(nuevosdatos)
                   <Text style={styles.text}>{datospagar.Placa}</Text>
                 </View>
                 <Animatable.View animation="fadeInUp" style={styles.containercolumnas}>
-              <LinearGradient
-                colors={['#3393FF', '#00d4ff']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <MaterialCommunityIcons style={[styles.centeredIcono]} name="login" size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Hora Ingreso
-                </Animatable.Text>
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  {datospagar.Hora_entrada}
-                </Animatable.Text>
-              </LinearGradient>
-              <LinearGradient
-                 colors={['#d53369', '#daae51']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <MaterialCommunityIcons style={[styles.centeredIcono]} name="logout" size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Hora Salida
-                </Animatable.Text>
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                {datospagar.Hora_salida}
-                </Animatable.Text>
-              </LinearGradient>
-              <LinearGradient 
-              // colors={['#b29f94', '#603813']}
-              // colors={['#2193b0', '#6dd5ed']}
-              colors={['#1488CC', '#6FB1FC']}
-              start={[0, 0.5]}
-                end={[1, 0.5]}
-              style={[styles.box, {
-                  width: '60%',
-                  height: 110,
-                  margin: 10,
-                }]}>
-                  <Text style={styles.textlogo}>
-                    Pagar : $ {datospagar.Pagar}
-                  </Text>
-                </LinearGradient>
-            </Animatable.View>
-            <Animatable.View animation="fadeInUp">
-               
-                <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
-  <LinearGradient
-        colors={['#FF9800', '#F44336']}
-        start={[0, 0.5]}
-        end={[1, 0.5]}
-        style={styles.button}
-      >
-        <Ionicons name="send" size={24} color="white" />
-        <Text style={styles.buttonText}>Realizar Pago</Text>
-      </LinearGradient>
-</TouchableOpacity>
+                  <LinearGradient
+                    colors={['#3393FF', '#00d4ff']}
+                    start={[0, 0.5]}
+                    end={[1, 0.5]}
+                    style={[styles.example, { borderRadius: 20 }]}
+                  >
+                    <MaterialCommunityIcons style={[styles.centeredIcono]} name="login" size={30} color="#fff" />
+                    <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                      Hora Ingreso
+                    </Animatable.Text>
+                    <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                      {datospagar.Hora_entrada}
+                    </Animatable.Text>
+                  </LinearGradient>
+                  <LinearGradient
+                    colors={['#d53369', '#daae51']}
+                    start={[0, 0.5]}
+                    end={[1, 0.5]}
+                    style={[styles.example, { borderRadius: 20 }]}
+                  >
+                    <MaterialCommunityIcons style={[styles.centeredIcono]} name="logout" size={30} color="#fff" />
+                    <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                      Hora Salida
+                    </Animatable.Text>
+                    <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
+                      {datospagar.Hora_salida}
+                    </Animatable.Text>
+                  </LinearGradient>
+                  <LinearGradient
+                    // colors={['#b29f94', '#603813']}
+                    // colors={['#2193b0', '#6dd5ed']}
+                    colors={['#1488CC', '#6FB1FC']}
+                    start={[0, 0.5]}
+                    end={[1, 0.5]}
+                    style={[styles.box, {
+                      width: '60%',
+                      height: 110,
+                      margin: 10,
+                    }]}>
+                    <Text style={styles.textlogo}>
+                      Pagar : $ {datospagar.Pagar}
+                    </Text>
+                  </LinearGradient>
                 </Animatable.View>
-                <Button  title="Cancelar" onPress={() => setModalVisible(false)} />
+                <Animatable.View animation="fadeInUp">
+
+                  <TouchableOpacity onPress={() => showAlert()} style={{ paddingRight: 5 }}>
+                    <LinearGradient
+                      colors={['#FF9800', '#F44336']}
+                      start={[0, 0.5]}
+                      end={[1, 0.5]}
+                      style={styles.button}
+                    >
+                      <Ionicons name="send" size={24} color="white" />
+                      <Text style={styles.buttonText}>Realizar Pago</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </Animatable.View>
+                <Button title="Cancelar" onPress={() => setModalVisible(false)} />
               </View>
             </Modal>
             <AwesomeAlert
-          show={confirmarVisible}
-          showProgress={false}
-          progressSize="large"
-          progressColor="blue"
-          title="Confirmar"
-          message="Desea Registrar pago"
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
-          cancelText="No, cancelar"
-          cancelButtonColor="#F42A2A"
-          confirmText="Si, Registrar"
-          confirmButtonColor="#2A4CF4"
-          onCancelPressed={() => setConfirmarVisible(false)}
-          onConfirmPressed={() => Salida(datospagar,'P')}
-        />
-          <DropdownAlert  ref={(ref) => {
-          if (ref) {
-            dropDownAlertRef = ref;
-          }
-        }}/>
+              show={confirmarVisible}
+              showProgress={false}
+              progressSize="large"
+              progressColor="blue"
+              title="Confirmar"
+              message="Desea Registrar pago"
+              closeOnTouchOutside={false}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText="No, cancelar"
+              cancelButtonColor="#F42A2A"
+              confirmText="Si, Registrar"
+              confirmButtonColor="#2A4CF4"
+              onCancelPressed={() => setConfirmarVisible(false)}
+              onConfirmPressed={() => Salida(datospagar, 'P')}
+            />
+            <DropdownAlert ref={(ref) => {
+              if (ref) {
+                dropDownAlertRef = ref;
+              }
+            }} />
           </ScrollView>
         </SafeAreaView>
       </AlertNotificationRoot>
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     justifyContent: 'center',
-    marginTop:30
+    marginTop: 30
   },
   iconContainer: {
     backgroundColor: '#83baf2',
