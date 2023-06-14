@@ -47,17 +47,6 @@ const Inicio = () => {
     setdatos(datosoptenidos)
     // Cargando(false);
   }
-  // const alerta = (datos, accion) => {
-  //   Alert.alert(
-  //     '',
-  //     'Desea darle Salida',
-  //     [
-  //       { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-  //       { text: 'OK', onPress: () => Salida(datos, accion) },
-  //     ],
-  //     { cancelable: false }
-  //   )
-  // }
   const vermodal = (codigo) => {
     setModalVisible(true);
     Calcularpago(codigo);
@@ -128,39 +117,6 @@ const Inicio = () => {
                   </Animatable.Text>
                 </LinearGradient>
               ))}
-              {/* <LinearGradient
-                colors={['#d53369', '#daae51']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <FontAwesome5 style={[styles.centeredIcono]} name="motorcycle" size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles - {totaldisponible[0].cantidad - totaldisponible[0].ocupados}
-                </Animatable.Text>
-              </LinearGradient>
-              <LinearGradient
-                colors={['#00d2ff', '#3a47d5']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Total Carros - {totaldisponible[1].ocupados}
-                </Animatable.Text>
-              </LinearGradient>
-              <LinearGradient
-                colors={['#00d2ff', '#3a47d5']}
-                start={[0, 0.5]}
-                end={[1, 0.5]}
-                style={[styles.example, { borderRadius: 20 }]}
-              >
-                <FontAwesome5 style={[styles.centeredIcono]} name="car" size={30} color="#fff" />
-                <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  Disponibles - {totaldisponible[1].cantidad - totaldisponible[1].ocupados}
-                </Animatable.Text>
-              </LinearGradient> */}
             </Animatable.View>
             <View style={styles.inputContainer}>
               <TextInput
@@ -191,19 +147,6 @@ const Inicio = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between'
                   }}>
-                    {/* <TouchableOpacity onPress={() => alerta(item, 'S')} style={{ paddingRight: 5, }}>
-                      <LinearGradient
-                        colors={['#FF4C33', '#fff']}
-                        style={{
-                          backgroundColor: '#0aada8',
-                          padding: 10,
-                          width: 50,
-                          borderRadius: 10,
-                        }}
-                      >
-                        <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
-                      </LinearGradient>
-                    </TouchableOpacity> */}
                     {item.nombre == 'SINREGISTRO' &&  
                     <TouchableOpacity onPress={() => vermodal(item.id_en_sa)}>
                       <LinearGradient
