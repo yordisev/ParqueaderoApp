@@ -166,7 +166,8 @@ const Inicio = () => {
             </View>
             <View style={{ padding: 20 }}>
               {filtrardatos.map(item => (
-                <Animatable.View animation="fadeInLeft" style={[styles.contenido]} key={item.id_en_sa}>
+                <Animatable.View animation="fadeInLeft" style={[styles.contenido,
+                {backgroundColor: item.tipo_vehiculo === 'M' ? '#d53369' : '#00d2ff'}]} key={item.id_en_sa}>
                   <View>
                     <Text style={styles.clasetitulo}>{item.nombre}</Text>
                     <Text style={styles.clasetitulo}>{item.placa_vehiculo}</Text>
@@ -369,7 +370,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   contenido: {
-    backgroundColor: '#A0C4F9',
     padding: 20,
     marginVertical: 8,
     borderRadius: 12,
