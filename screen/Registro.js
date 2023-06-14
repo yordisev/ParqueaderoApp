@@ -50,7 +50,7 @@ const Registro = () => {
     for (var i = 0; i < count; i++) {
       valores.push({
         value: datosoptenidos[i].precio,
-        label: datosoptenidos[i].precio,
+        label: datosoptenidos[i].precio+' ('+datosoptenidos[i].tipo_vehiculo+')',
       });
     }
     setdatosvalor(valores);
@@ -85,18 +85,10 @@ const Registro = () => {
           <ScrollView
             contentContainerStyle={styles.scrollContentContainer}
           >
-            <Text style={{
-                                color: 'black',
-                                fontSize: 20,
-                                fontWeight: 'bold',
-                                textTransform: 'uppercase', justifyContent: 'center',
-                            }}>
-                                Buscar Placa
-                            </Text>
             <View style={styles.inputContainer}>
   <TextInput
     style={styles.input}
-    placeholder="Placa a Buscar"
+    placeholder="Buscar Por Nombre o Placa"
     placeholderTextColor="#BDC3C7"
     onChangeText={(text) => datosenviar('nombrecliente',text)}
     onSubmitEditing={Buscar}
@@ -164,9 +156,15 @@ const Registro = () => {
       </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
-              <FontAwesome5 name="car-alt" size={20}/>
+              <FontAwesome5 name="hashtag" size={20}/>
           </View>
           <Text style={styles.text}>{datosingreso.placa}</Text>
+      </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="car-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosingreso.tipo_vehiculo === 'M' ? 'Moto' : 'Carro'}</Text>
       </View>
       <Dropdown
           style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}

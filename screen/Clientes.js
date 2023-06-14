@@ -46,6 +46,7 @@ const Clientes = () => {
     placa:datos.placa,
     celular:datos.celular,
     estado:datos.estado,
+    tipo_vehiculo:datos.tipo_vehiculo,
     })
     setModalVisible(true);
   }
@@ -155,12 +156,17 @@ const Clientes = () => {
       </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
-              <FontAwesome5 name="car-alt" size={20}/>
+              <FontAwesome5 name="hashtag" size={20}/>
           </View>
           <Text style={styles.text}>{datosingreso.placa}</Text>
       </View>
+          <View style={styles.containerotro}>
+          <View style={styles.iconContainer}>
+              <FontAwesome5 name="car-alt" size={20}/>
+          </View>
+          <Text style={styles.text}>{datosingreso.tipo_vehiculo === 'M' ? 'Moto' : 'Carro'}</Text>
+      </View>
           <View style={styles.dropdown}>
-          
           <Picker selectedValue={datosingreso.estado} onValueChange={(itemValue) => datosinput('estado',itemValue)}>
                 {
                   cursos.map((cr, index) => {

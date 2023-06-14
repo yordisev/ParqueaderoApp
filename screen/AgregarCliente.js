@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import DropdownAlert from 'react-native-dropdownalert';
+import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { GuardarCliente } from '../api'
 
@@ -15,13 +16,15 @@ const AgregarCliente = () => {
     apellido:'',
     celular:'',
     placa:'',
+    tipovehiculo:'',
   });
   const datosinput = (name, value) => setdatosingresos({...datosingreso,[name]:value});
   const RegistrarCliente = async () => {
     if(datosingreso.nombre == '' || datosingreso.nombre == null || datosingreso.nombre == undefined ||
     datosingreso.apellido == '' || datosingreso.apellido == null || datosingreso.apellido == undefined ||
     datosingreso.celular == '' || datosingreso.celular == null || datosingreso.celular == undefined ||
-    datosingreso.placa == '' || datosingreso.placa == null || datosingreso.placa == undefined){
+    datosingreso.placa == '' || datosingreso.placa == null || datosingreso.placa == undefined ||
+    datosingreso.tipovehiculo == '' || datosingreso.tipovehiculo == null || datosingreso.tipovehiculo == undefined){
       dropDownAlertRef.alertWithType('warn', 'Requeridos', 'Todos Los Datos Son requeridos');
     }else{
     try {
@@ -90,6 +93,12 @@ const AgregarCliente = () => {
           placeholderTextColor='#BDC3C7'
           onChangeText={(text) => datosinput('placa',text)}
           value={datosingreso.placa}/>
+      </View>
+      <View style={styles.dropdown}>
+          <Picker selectedValue={datosingreso.tipovehiculo} onValueChange={(itemValue) => datosinput('tipovehiculo',itemValue)}>
+          <Picker.Item label="Moto" value="M" />
+          <Picker.Item label="Carro" value="C" />
+              </Picker>
       </View>
       <View style={styles.containercolumnas}>
         <TouchableOpacity onPress={() => RegistrarCliente()} style={{ paddingRight: 5 }}>
@@ -214,6 +223,16 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 18,
       marginLeft: 8,
+    },
+    dropdown: {
+      width: '80%',
+      height: 50,
+      borderColor: 'gray',
+      borderWidth: 0.5,
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      marginLeft:5,
+      marginBottom: 10,
     },
   });
 export default AgregarCliente
