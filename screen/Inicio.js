@@ -113,7 +113,7 @@ const Inicio = () => {
                   {data.ocupados} /  {data.cantidad}
                   </Animatable.Text>
                   <Animatable.Text animation="flipInY" style={[styles.centeredText]}>
-                  {data.cantidad - data.ocupados}
+                 Disponibles: {data.cantidad - data.ocupados}
                   </Animatable.Text>
                 </LinearGradient>
               ))}
