@@ -98,7 +98,7 @@ const Clientes = () => {
 </View>
 <View style={{ padding: 10 }}>
               {filtrardatos.map(item => (
-                <Animatable.View animation="fadeInLeft"  style={[styles.contenido,{backgroundColor: item.estado === 'A' ? '#A0C4F9' : '#FF5555'}]} key={item.cedula}>
+                <Animatable.View animation="fadeInLeft"  style={[styles.contenido,{backgroundColor: item.estado === 'A' ? '#A0C4F9' : '#FF5555'}]} key={item.placa}>
                   <View style={{ paddingRight: 5, }}>
                     <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
                     <Text style={styles.clasetitulo}>{item.placa}</Text>

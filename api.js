@@ -60,7 +60,6 @@ export const listartodaslastarifas = async () => {
 export const RegistroEntrada = async (datos,valor) => {
   const headersyordis = await obtenerValorAsyncStorage();
   const datosenviar = {
-    cliente:datos.cedula,
     v_precio_pagar:valor,
     placa:datos.placa,
     tipo_vehiculo:datos.tipo_vehiculo
@@ -87,7 +86,6 @@ export const Realizarpagototal = async (datosclientes,valorpagar,dias) => {
   const headersyordis = await obtenerValorAsyncStorage();
   const datosenviar = {
     cantidaddias:parseInt(dias),
-    cliente:datosclientes.cedula,
     placa:datosclientes.placa_vehiculo,
     montopagar:parseInt(valorpagar)
   }

@@ -110,7 +110,7 @@ const Registro = () => {
 </View>
 <View style={{ padding: 10 }}>
               {filtrardatos.map(item => (
-                <Animatable.View animation="fadeInLeft"  style={[styles.contenido]} key={item.cedula}>
+                <Animatable.View animation="fadeInLeft"  style={[styles.contenido]} key={item.placa}>
                   <View style={{ paddingRight: 5, }}>
                     <Text style={styles.clasetitulo}>{item.nombre} {item.apellido}</Text>
                     <Text style={styles.clasetitulo}>{item.placa}</Text>

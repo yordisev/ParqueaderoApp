@@ -11,7 +11,6 @@ const AgregarCliente = () => {
   let dropDownAlertRef = useRef();
   const navigation = useNavigation()
   const [datosingreso, setdatosingresos] = useState({
-    cedula:'',
     nombre:'',
     apellido:'',
     celular:'',
@@ -19,8 +18,7 @@ const AgregarCliente = () => {
   });
   const datosinput = (name, value) => setdatosingresos({...datosingreso,[name]:value});
   const RegistrarCliente = async () => {
-    if(datosingreso.cedula == '' || datosingreso.cedula == null || datosingreso.cedula == undefined ||
-    datosingreso.nombre == '' || datosingreso.nombre == null || datosingreso.nombre == undefined ||
+    if(datosingreso.nombre == '' || datosingreso.nombre == null || datosingreso.nombre == undefined ||
     datosingreso.apellido == '' || datosingreso.apellido == null || datosingreso.apellido == undefined ||
     datosingreso.celular == '' || datosingreso.celular == null || datosingreso.celular == undefined ||
     datosingreso.placa == '' || datosingreso.placa == null || datosingreso.placa == undefined){
@@ -52,17 +50,6 @@ const AgregarCliente = () => {
                   Datos del Cliente
                 </Text>
                 </View>
-          <View style={styles.containerotro}>
-          <View style={styles.iconContainer}>
-              <FontAwesome5 name="hashtag" size={20}/>
-          </View>
-          <TextInput style={styles.input}
-          placeholder="Cedula"
-          keyboardType="numeric"  
-          placeholderTextColor='#BDC3C7'
-          onChangeText={(text) => datosinput('cedula',text)}
-          value={datosingreso.cedula}/>
-      </View>
           <View style={styles.containerotro}>
           <View style={styles.iconContainer}>
               <FontAwesome5 name="user-alt" size={20}/>
