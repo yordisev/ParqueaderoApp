@@ -75,7 +75,6 @@ const Rutas = () => {
           options={{
             headerTitle: 'Inicio',
             headerShown: true,
-             headerTitleAlign: 'center', // Centra el título
                 title: "",
                 headerStyle:{
                     backgroundColor:'#3393FF'

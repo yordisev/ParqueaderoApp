@@ -1,5 +1,5 @@
 import React, { useEffect, useState,useRef } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView,TextInput, Button, SafeAreaView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { FontAwesome5,MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,11 +16,24 @@ const Inicio = () => {
   const [cargar, Cargando] = useState(false);
   const [totaldisponible, settotaldisponible] = useState([]);
   const [filtrardatos, setfiltrardatos] = useState([]);
+  const [datos, setdatos] = useState([]);
   const [datospagar, setdatospagar] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmarVisible, setConfirmarVisible] = useState(false);
   let dropDownAlertRef = useRef();
 
+  const filtrarcliente = (text) => {
+  if(text){
+const nuevosdatos = datos.filter(item => {
+const datosfiltrados = item.nombre ? item.nombre.toUpperCase() :''.toUpperCase();
+const datosdeimput = text.toUpperCase();
+return datosfiltrados.indexOf(datosdeimput) > -1;
+})
+setfiltrardatos(nuevosdatos)
+  }else {
+    setfiltrardatos(datos)
+  }
+}
   useEffect(() => {
     Cargarlista()
   }, [isFocused])
@@ -30,6 +43,7 @@ const Inicio = () => {
     settotaldisponible(disponibilidad)
     const datosoptenidos = await listarsalidacarros()
     setfiltrardatos(datosoptenidos)
+    setdatos(datosoptenidos)
     // Cargando(false);
   }
   // const alerta = (datos, accion) => {
@@ -66,23 +80,11 @@ const Inicio = () => {
       setModalVisible(false);
       setConfirmarVisible(false);
       if (respuesta.CODIGO == 0) {
-        // Dialog.show({
-        //   type: ALERT_TYPE.SUCCESS,
-        //   title: 'Success',
-        //   textBody: respuesta.MENSAJE,
-        //   button: 'close',
-        // })
         dropDownAlertRef.alertWithType('success', 'Exitoso', respuesta.MENSAJE);
         setTimeout(() => {
           Cargarlista()
         }, 1000);
       } else {
-        // Dialog.show({
-        //   type: ALERT_TYPE.DANGER,
-        //   title: 'Error',
-        //   textBody: respuesta.MENSAJE,
-        //   button: 'close',
-        // })
         dropDownAlertRef.alertWithType('error', 'Error', respuesta.MENSAJE);
       }
     } catch (error) {
@@ -146,7 +148,20 @@ const Inicio = () => {
                 </Animatable.Text>
               </LinearGradient> */}
             </Animatable.View>
-            <View style={{ padding: 30 }}>
+            <View style={styles.inputContainer}>
+  <TextInput
+    style={styles.input}
+    placeholder="Buscar"
+    placeholderTextColor="#BDC3C7"
+    onChange={(event) => filtrarcliente(event.nativeEvent.text)}
+  />
+  <TouchableOpacity
+    style={styles.icon}
+  >
+    <Ionicons name='search' size={25} color="black" />
+  </TouchableOpacity>
+</View>
+            <View style={{ padding: 20 }}>
               {filtrardatos.map(item => (
                 <Animatable.View animation="fadeInLeft" style={[styles.contenido]} key={item.id_en_sa}>
                   <View>
@@ -309,6 +324,31 @@ const Inicio = () => {
     ))
 }
 const styles = StyleSheet.create({
+  inputContainer: {
+    position: 'relative',
+    width: '90%',
+    margin: 5,
+    paddingLeft: 40,
+  },
+  input: {
+    backgroundColor: '#949c92',
+    width: '100%',
+    height: 50,
+    borderRadius: 10,
+    paddingLeft: 20,
+    paddingRight: 50,
+    color: 'black',
+    fontSize: 18,
+  },
+  icon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   button: {
     width: '50%',
     margin: 10,
