@@ -4,10 +4,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import {Dropdown} from 'react-native-element-dropdown';
+import { Picker } from "@react-native-picker/picker";
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from "@react-navigation/native";
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { buscarpornombre,listartodaslastarifas,RegistroEntrada } from '../api'
+import { buscarpornombre,listartodaslastarifas,RegistroEntrada,Registraryguardar } from '../api'
 
 const Registro = () => {
   const navigation = useNavigation()
@@ -15,13 +16,53 @@ const Registro = () => {
     nombrecliente:'',
   })
   const datosenviar = (name, value) => Enviarloginacceso({...datosbuscar,[name]:value});
+  // ---------------------------------------------------registro-------------------------------------
+  const [datosdelregistro, setdatosregistro] = useState({
+    placa:'',
+    tipovehiculo:'',
+    precio_pagar:'',
+  });
+  const datosinput = (name, value) => setdatosregistro({...datosdelregistro,[name]:value});
+  const RegistrarClientediarios = async () => {
+    if(datosdelregistro.placa == '' || datosdelregistro.placa == null || datosdelregistro.placa == undefined ||
+     datosdelregistro.tipovehiculo == '' || datosdelregistro.tipovehiculo == null || datosdelregistro.tipovehiculo == undefined){
+      dropDownAlertRef.alertWithType('warn', 'Requeridos', 'Todos Los Datos Son requeridos');
+    }else{
+    try {
+      const registro = await Registraryguardar(datosdelregistro)
+      const respuesta = JSON.parse(registro[0].id);
+      setverregistro(false)
+      if (respuesta.CODIGO == 0) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Entendido',
+          textBody: respuesta.MENSAJE,
+          button: 'close',
+        })
+        
+      } else {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: 'Entendido',
+          textBody: respuesta.MENSAJE,
+          button: 'close',
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  }
+  // ------------------------------------------------------fin registro --------------------------------
   const [filtrardatos, setfiltrardatos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [datosingreso, setdatosingresos] = useState([]);
   const [valorDatos, setdatosvalor] = useState([]);
   const [valorprecio, setvalor] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [verregistro, setverregistro] = useState(false);
   const Buscar = async () => {
+    ListarTarifa()
     if(datosbuscar.nombrecliente == '' || datosbuscar.nombrecliente == undefined || datosbuscar.nombrecliente == null){
       Dialog.show({
         type: ALERT_TYPE.WARNING,
@@ -32,7 +73,12 @@ const Registro = () => {
     } else{
    try {
      const listadonegocios = await buscarpornombre(datosbuscar)
-     setfiltrardatos(listadonegocios)
+     if(listadonegocios.length == 0){
+      setverregistro(true)
+     }else{
+       setverregistro(false)
+       setfiltrardatos(listadonegocios)
+     }
    } catch (error) {
     console.error(error)
    }
@@ -100,6 +146,52 @@ const Registro = () => {
     <Ionicons name='search' size={25} color="black" />
   </TouchableOpacity>
 </View>
+{verregistro ? (
+  <View style={{ padding: 10,margin:20 }}>
+      <View style={styles.containerotro}>
+      <View style={styles.iconContainer}>
+          <FontAwesome5 name="car-alt" size={20}/>
+      </View>
+      <TextInput style={{backgroundColor: '#949c92',
+    width: '80%',
+    height: 40,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 20,
+    color: 'black',
+    fontSize: 18,}}
+      placeholder="Placa"  
+      placeholderTextColor='#BDC3C7'
+      onChangeText={(text) => datosinput('placa',text)}
+      value={datosdelregistro.placa}/>
+  </View>
+  <View style={styles.dropdown1}>
+      <Picker selectedValue={datosdelregistro.tipovehiculo} onValueChange={(itemValue) => datosinput('tipovehiculo',itemValue)}>
+      <Picker.Item label="Moto" value="M" />
+      <Picker.Item label="Carro" value="C" />
+          </Picker>
+  </View>
+  <View style={styles.dropdown1}>
+      <Picker selectedValue={datosdelregistro.precio_pagar} onValueChange={(itemValue) => datosinput('precio_pagar',itemValue)}>
+                { valorDatos.map((cr, index) => {
+                    return <Picker.Item key={index} label={cr.label} value={cr.value} />
+                  })
+                }
+          </Picker>
+  </View>
+    <TouchableOpacity onPress={() => RegistrarClientediarios()} style={{ paddingRight: 5 }}>
+<LinearGradient
+    colors={['#090979', '#00d4ff']}
+    start={[0, 0.5]}
+    end={[1, 0.5]}
+    style={styles.button}
+  >
+    <Ionicons name="save" size={30} color="white" />
+    <Text style={styles.buttonText}>Registrar Entrada</Text>
+  </LinearGradient>
+</TouchableOpacity>
+</View>
+    ) : (
 <View style={{ padding: 10 }}>
               {filtrardatos.map(item => (
                 <Animatable.View animation="fadeInLeft"  style={[styles.contenido]} key={item.placa}>
@@ -127,6 +219,7 @@ const Registro = () => {
                 </Animatable.View>
               ))}
             </View>
+    )}
             <Modal
         animationType='slide'
         visible={modalVisible}
@@ -319,6 +412,16 @@ dropdown: {
   borderRadius: 8,
   paddingHorizontal: 10,
   marginLeft:30,
+  marginBottom: 10,
+},
+dropdown1: {
+  // width: '80%',
+  height: 50,
+  borderColor: 'gray',
+  borderWidth: 0.5,
+  borderRadius: 8,
+  paddingHorizontal: 10,
+  marginLeft:5,
   marginBottom: 10,
 },
 placeholderStyle: {

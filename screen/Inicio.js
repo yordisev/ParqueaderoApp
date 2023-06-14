@@ -20,6 +20,7 @@ const Inicio = () => {
   const [datospagar, setdatospagar] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [confirmarVisible, setConfirmarVisible] = useState(false);
+  const [confirmarVisiblesalida, setConfirmarVisibleSalida] = useState(false);
   let dropDownAlertRef = useRef();
 
   const filtrarcliente = (text) => {
@@ -73,12 +74,22 @@ const Inicio = () => {
   showAlert = () => {
     setConfirmarVisible(true)
   };
+  showAlertsalida = (datoentrada) => {
+    const datos = {
+      Id_unico:datoentrada.id_en_sa,
+      Placa:datoentrada.placa_vehiculo,
+      Pagar:'',
+    }
+    setdatospagar(datos);
+    setConfirmarVisibleSalida(true)
+  };
   const Salida = async (datos, accion) => {
     try {
       const salidavehiculos = await RegistroSalida(datos, accion)
       const respuesta = JSON.parse(salidavehiculos[0].salida);
       setModalVisible(false);
       setConfirmarVisible(false);
+      setConfirmarVisibleSalida(false)
       if (respuesta.CODIGO == 0) {
         dropDownAlertRef.alertWithType('success', 'Exitoso', respuesta.MENSAJE);
         setTimeout(() => {
@@ -193,6 +204,7 @@ const Inicio = () => {
                         <FontAwesome5 style={[styles.centeredIcono]} name="door-open" size={15} color="#fff" />
                       </LinearGradient>
                     </TouchableOpacity> */}
+                    {item.nombre == 'SINREGISTRO' &&  
                     <TouchableOpacity onPress={() => vermodal(item.id_en_sa)}>
                       <LinearGradient
                         colors={['#FF4C33', '#fff']}
@@ -203,9 +215,25 @@ const Inicio = () => {
                           borderRadius: 10,
                         }}
                       >
-                        <FontAwesome5 style={[styles.centeredIcono]} name="dollar-sign" size={15} color="#fff" />
+                        <FontAwesome5 style={[styles.centeredIcono]} name="dollar-sign" size={20} color="#fff" />
                       </LinearGradient>
                     </TouchableOpacity>
+                      }
+                    {item.nombre != 'SINREGISTRO' &&  
+                    <TouchableOpacity onPress={() => showAlertsalida(item)}>
+                      <LinearGradient
+                        colors={['#58e012', '#4792eb']}
+                        style={{
+                          backgroundColor: '#0aada8',
+                          padding: 10,
+                          width: 50,
+                          borderRadius: 10,
+                        }}
+                      >
+                        <FontAwesome5 style={[styles.centeredIcono]} name="dollar-sign" size={20} color="#fff" />
+                      </LinearGradient>
+                    </TouchableOpacity>
+                      }
                   </View>
                 </Animatable.View>
               ))}
@@ -316,6 +344,24 @@ const Inicio = () => {
               confirmButtonColor="#2A4CF4"
               onCancelPressed={() => setConfirmarVisible(false)}
               onConfirmPressed={() => Salida(datospagar, 'P')}
+            />
+            <AwesomeAlert
+              show={confirmarVisiblesalida}
+              showProgress={false}
+              progressSize="large"
+              progressColor="blue"
+              title="Confirmar"
+              message="Desea Registrar Salida"
+              closeOnTouchOutside={false}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText="No, cancelar"
+              cancelButtonColor="#F42A2A"
+              confirmText="Si, Confirmar"
+              confirmButtonColor="#2A4CF4"
+              onCancelPressed={() => setConfirmarVisibleSalida(false)}
+              onConfirmPressed={() => Salida(datospagar, 'S')}
             />
             <DropdownAlert ref={(ref) => {
               if (ref) {

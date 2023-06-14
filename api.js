@@ -57,6 +57,14 @@ export const listartodaslastarifas = async () => {
   const resultado = await result.json()
        return resultado;
 }
+
+export const Registraryguardar= async (datos) => {
+  const headersyordis = await obtenerValorAsyncStorage();
+  const result =  await fetch(API+'registrarentradayguardar', { method: "POST",headers: headersyordis,body: JSON.stringify(datos)})
+  const resultado = await result.json()
+  return resultado;
+}
+
 export const RegistroEntrada = async (datos,valor) => {
   const headersyordis = await obtenerValorAsyncStorage();
   const datosenviar = {
