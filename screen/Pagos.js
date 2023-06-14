@@ -314,7 +314,7 @@ const Pagos = () => {
                      end={[1, 0.5]}
                     style={[styles.box, {
           width: '60%',
-          height: 110,
+          height: 60,
           margin:10,
           marginLeft:85,
         }]}>
